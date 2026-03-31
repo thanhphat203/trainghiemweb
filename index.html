@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Insight - Phân tích chuyên sâu & Dữ liệu On-chain</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#ffffff', surface: '#f3f4f6', surfaceHover: '#e5e7eb',
+                        darkBg: '#050505', darkSurface: '#0f0f11', darkSurfaceHover: '#1a1a1e',
+                        textMain: '#111827', textMuted: '#6b7280', 
+                        darkTextMain: '#f8fafc', darkTextMuted: '#8b8b93', 
+                        accent: '#00e58f',
+                    },
+                    fontFamily: { sans: ['"Inter"', 'sans-serif'], serif: ['"Lora"', 'serif'], }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { transition: background-color 0.3s, color 0.3s; selection: background-color #00e58f; selection: color #050505;}
+        
+        .floating-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1); }
+        .dark .floating-nav { background: rgba(15, 15, 17, 0.75); border: 1px solid rgba(255, 255, 255, 0.04); box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8); }
+        
+        .premium-card { background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%); border: 1px solid rgba(0, 0, 0, 0.05); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative;}
+        .dark .premium-card { background: linear-gradient(180deg, rgba(20,20,22,1) 0%, rgba(15,15,17,1) 100%); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .premium-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); border-color: rgba(0, 229, 143, 0.3); }
+        .dark .premium-card:hover { box-shadow: 0 20px 40px -15px rgba(0, 229, 143, 0.1); border-color: rgba(0, 229, 143, 0.2); }
+        
+        .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .dark .ticker-wrap { border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .ticker { display: inline-flex; white-space: nowrap; animation: ticker 40s linear infinite; }
+        .ticker:hover { animation-play-state: paused; }
+        .ticker-item { padding: 0.5rem 2.5rem; font-size: 0.8rem; color: #00e58f; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;}
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .img-zoom-container { overflow: hidden; }
+        .img-zoom-container img { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform;}
+        .premium-card:hover .img-zoom-container img { transform: scale(1.03); }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #27272a; }
+        ::-webkit-scrollbar-thumb:hover { background: #00e58f; }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-background text-textMain dark:bg-darkBg dark:text-darkTextMain antialiased flex flex-col min-h-screen relative transition-colors duration-300">
+
+    <div class="ticker-wrap h-9 flex items-center bg-gray-50 dark:bg-[#050505]">
+        <div class="ticker">
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Phân tích chuyên sâu & Dữ liệu On-chain</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Cập nhật tin tức thị trường 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Phân tích chuyên sâu & Dữ liệu On-chain</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Cập nhật tin tức thị trường 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Phân tích chuyên sâu & Dữ liệu On-chain</div>
+        </div>
+    </div>
+
+    <div class="sticky top-6 z-50 px-4 flex justify-center w-full pointer-events-none">
+        <header class="floating-nav w-full max-w-5xl rounded-full px-6 py-3 flex items-center justify-between pointer-events-auto transition-transform duration-500" id="navbar">
+            <a href="index.html" class="flex items-center gap-2 text-xl font-extrabold tracking-tight">
+                <span class="text-accent"><i class="fa-solid fa-layer-group"></i></span>
+                Trading<span class="text-textMuted dark:text-darkTextMuted font-medium">Insight</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-[11px] text-textMuted dark:text-darkTextMuted uppercase tracking-widest">
+                <a href="#tag/NEWS" class="hover:text-accent transition-colors">News</a>
+                <a href="#tag/MARKETS" class="hover:text-accent transition-colors">Markets</a>
+                <a href="#tag/ON-CHAIN DATA" class="hover:text-accent transition-colors">On Chain</a>
+                <a href="#tag/RESEARCH" class="hover:text-accent transition-colors">Research</a>
+            </nav>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-surface dark:bg-darkSurface border border-gray-200 dark:border-white/5 flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:text-accent transition-all">
+                    <i class="fas fa-moon dark:hidden"></i>
+                    <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <main class="flex-grow container mx-auto px-4 lg:px-8 pt-10 pb-20 max-w-[1300px]">
+        <div id="loading-skeleton" class="w-full mt-4"><div class="animate-pulse flex space-x-4"><div class="flex-1 space-y-6 py-1"><div class="h-[500px] bg-surface dark:bg-darkSurface rounded-3xl"></div></div></div></div>
+
+        <div id="content-area" class="hidden fade-in">
+            <section class="mb-20" id="hero-section">
+                <div class="flex items-center justify-between mb-8 px-1">
+                    <h2 class="text-2xl font-bold tracking-tight flex items-center gap-3">
+                        <i class="fab fa-hotjar text-accent text-xl animate-pulse"></i> Tiêu Điểm Nóng
+                    </h2>
+                </div>
+                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-5 auto-rows-[280px] lg:auto-rows-[320px]"></div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+                <div class="lg:col-span-8 space-y-10">
+                    <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/5 pb-6">
+                        <h2 class="text-xl font-bold tracking-tight">Bài Viết Mới Nhất</h2>
+                        <div id="filter-status" class="hidden flex items-center gap-3">
+                            <span class="text-xs text-textMuted dark:text-darkTextMuted font-medium tracking-wide">Đang hiển thị: <span id="tag-name" class="font-bold text-accent">...</span></span>
+                            <a href="index.html#latest" class="text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-accent transition-colors bg-surface dark:bg-darkSurface px-2.5 py-1.5 rounded-full border border-gray-200 dark:border-white/10 uppercase tracking-widest"><i class="fas fa-times mr-1"></i> Xóa lọc</a>
+                        </div>
+                    </div>
+
+                    <div id="posts-list" class="flex flex-col gap-10 scroll-mt-32"></div>
+                </div>
+
+                <aside class="lg:col-span-4 space-y-12">
+                    <div class="premium-card p-8 rounded-3xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/20 transition-all duration-700 pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <span class="inline-block px-3 py-1 bg-accent/10 border border-accent/20 rounded-full text-[9px] font-bold tracking-widest uppercase text-accent mb-5"><i class="fas fa-envelope-open-text mr-1"></i> Bản tin độc quyền</span>
+                            <h3 class="text-2xl font-bold mb-3 tracking-tight">Nhận Insight Sớm Nhất</h3>
+                            <p class="text-sm text-textMuted dark:text-darkTextMuted mb-8 leading-relaxed font-serif">Tham gia cộng đồng và nhận tín hiệu dòng tiền smart money ngay qua email.</p>
+                            <form class="space-y-3" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã tham gia!');">
+                                <input type="email" placeholder="Nhập email của bạn..." required class="w-full bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent/50 placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-colors shadow-sm">
+                                <button type="submit" class="w-full bg-textMain dark:bg-white text-white dark:text-background hover:bg-accent hover:text-white dark:hover:bg-accent dark:hover:text-white font-bold py-3.5 rounded-xl transition-all duration-300 text-sm">Đăng ký ngay</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-[11px] font-bold mb-6 tracking-widest uppercase text-textMuted dark:text-darkTextMuted border-b border-gray-200 dark:border-white/5 pb-4 flex items-center gap-2">
+                            Đang thịnh hành
+                        </h3>
+                        <div class="space-y-4 flex flex-col" id="trending-list"></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-[#050505] pt-16 pb-10 mt-10 transition-colors duration-300">
+        <div class="container mx-auto px-4 lg:px-8 max-w-[1300px]">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">
+                <div class="col-span-1 md:col-span-2">
+                    <a href="index.html" class="flex items-center gap-2 text-xl font-extrabold tracking-tight mb-4">
+                        <span class="text-accent"><i class="fa-solid fa-layer-group"></i></span> Trading<span class="text-textMuted dark:text-darkTextMuted font-medium">Insight</span>
+                    </a>
+                    <p class="text-sm text-textMuted dark:text-darkTextMuted max-w-sm leading-relaxed mb-6 font-serif">Cung cấp góc nhìn vĩ mô và phân tích dữ liệu chuyên sâu, giúp bạn tự tin trong mọi quyết định đầu tư Crypto.</p>
+                </div>
+                <div class="col-span-2 flex gap-16 md:justify-end">
+                    <div>
+                        <h4 class="font-bold mb-6 tracking-tight text-sm">Điều hướng</h4>
+                        <ul class="space-y-3 text-sm font-medium text-textMuted dark:text-darkTextMuted">
+                            <li><a href="#tag/NEWS" class="hover:text-accent transition-colors">News</a></li>
+                            <li><a href="#tag/MARKETS" class="hover:text-accent transition-colors">Markets</a></li>
+                            <li><a href="#tag/ON-CHAIN DATA" class="hover:text-accent transition-colors">On chain Data</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-200 dark:border-white/5 text-center text-xs text-textMuted dark:text-darkTextMuted">
+                &copy; 2026 Trading Insight. All rights reserved. Vươn tầm quốc tế.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme init
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+        if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
+        else document.documentElement.classList.add('dark');
+
+        const formatDate = (dateString) => new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        const getImg = (img) => (img && img.trim() !== '') ? img : 'https://images.unsplash.com/photo-1639762681485-074b7f4fc8fd?q=80&w=1200';
+        
+        // Đồng bộ Metrics với LocalStorage để số View/Like nhảy khớp nhau giữa các trang
+        const getMetrics = (id) => {
+            const numId = Number(id) || Date.now();
+            const seed = (numId % 10000) + 1234;
+            
+            let extraViews = parseInt(localStorage.getItem(`views_extra_${id}`)) || 0;
+            let extraLikes = parseInt(localStorage.getItem(`likes_extra_${id}`)) || 0;
+            
+            let baseViews = ((seed * 7) % 8000 + 1500) + extraViews;
+            let baseLikes = ((seed * 3) % 500 + 150) + extraLikes;
+
+            return { views: baseViews.toLocaleString('vi-VN'), likes: baseLikes.toLocaleString('vi-VN'), rawLikes: baseLikes };
+        };
+
+        function renderBento(heroPosts, container) {
+            let bentoHTML = '';
+            if(heroPosts.length >= 1) {
+                const p1 = heroPosts[0];
+                const metrics = getMetrics(p1.id);
+                bentoHTML += `
+                    <a href="post.html?slug=${p1.slug}" class="premium-card group rounded-3xl lg:col-span-8 lg:row-span-2 overflow-hidden flex flex-col justify-end p-8 md:p-12 img-zoom-container">
+                        <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-60">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-80 dark:opacity-100"></div>
+                        <div class="relative z-10 w-full max-w-2xl mt-auto">
+                            <div class="flex flex-wrap items-center gap-2 mb-4">
+                                <span class="bg-accent text-black text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-[0_0_15px_rgba(0,229,143,0.5)]">HOT</span>
+                                <span class="border border-white/30 text-white text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-md">${p1.category || 'TIN TỨC'}</span>
+                            </div>
+                            <h1 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-white mb-4 leading-tight group-hover:text-accent transition-colors duration-500 tracking-tight line-clamp-2">${p1.title}</h1>
+                            <div class="flex items-center gap-4 text-xs font-medium text-gray-300">
+                                <span><i class="far fa-clock mr-1"></i>${formatDate(p1.date)}</span>
+                                <span><i class="far fa-eye mr-1"></i>${metrics.views} Lượt xem</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }
+            if(heroPosts.length >= 2) {
+                const p2 = heroPosts[1];
+                const metrics2 = getMetrics(p2.id);
+                bentoHTML += `
+                    <a href="post.html?slug=${p2.slug}" class="premium-card group rounded-3xl lg:col-span-4 lg:row-span-1 overflow-hidden flex flex-col justify-end p-8 img-zoom-container">
+                        <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 dark:opacity-100"></div>
+                        <div class="relative z-10 mt-auto">
+                            <span class="text-accent text-[9px] font-bold uppercase tracking-widest mb-3 block drop-shadow-md">${p2.category || 'TIN TỨC'}</span>
+                            <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-accent transition-colors line-clamp-2 drop-shadow-md">${p2.title}</h3>
+                            <div class="text-[11px] text-gray-300 font-medium"><span><i class="far fa-eye mr-1"></i>${metrics2.views} Lượt xem</span></div>
+                        </div>
+                    </a>
+                `;
+            }
+            if(heroPosts.length >= 3) {
+                const p3 = heroPosts[2];
+                const metrics3 = getMetrics(p3.id);
+                bentoHTML += `
+                    <a href="post.html?slug=${p3.slug}" class="premium-card group rounded-3xl lg:col-span-4 lg:row-span-1 overflow-hidden flex flex-col justify-end p-8 img-zoom-container bg-surface dark:bg-darkSurface">
+                        <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-50">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 dark:opacity-100"></div>
+                        <div class="relative z-10 mt-auto">
+                            <span class="text-blue-400 text-[9px] font-bold uppercase tracking-widest mb-3 block drop-shadow-md">${p3.category || 'TIN TỨC'}</span>
+                            <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-md">${p3.title}</h3>
+                            <div class="text-[11px] text-gray-300 font-medium"><span><i class="far fa-eye mr-1"></i>${metrics3.views} Lượt xem</span></div>
+                        </div>
+                    </a>
+                `;
+            }
+            container.innerHTML = bentoHTML;
+        }
+
+        function renderList(posts, container) {
+            if(posts.length === 0) { container.innerHTML = ''; return; }
+            let html = '';
+            posts.forEach(post => {
+                const metrics = getMetrics(post.id);
+                html += `
+                    <article class="group flex flex-col sm:flex-row gap-8 items-center border-b border-gray-200 dark:border-white/5 pb-10">
+                        <a href="post.html?slug=${post.slug}" class="w-full sm:w-[35%] aspect-[4/3] rounded-2xl overflow-hidden relative premium-card img-zoom-container shrink-0">
+                            <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-opacity">
+                        </a>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <div class="flex items-center gap-3 text-[10px] font-semibold text-textMuted dark:text-darkTextMuted mb-4 uppercase tracking-widest">
+                                <span class="text-accent">${post.category || 'TIN TỨC'}</span>
+                                <span class="w-1 h-1 bg-gray-300 dark:bg-white/10 rounded-full"></span>
+                                <span>${formatDate(post.date)}</span>
+                            </div>
+                            <h3 class="text-xl md:text-2xl font-bold mb-3 leading-tight group-hover:text-accent transition-colors"><a href="post.html?slug=${post.slug}">${post.title}</a></h3>
+                            <p class="text-[15px] text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed font-serif mb-4">${post.excerpt || ''}</p>
+                            <div class="flex items-center gap-4 text-[11px] text-textMuted dark:text-darkTextMuted font-medium">
+                                <span><i class="far fa-eye mr-1 text-accent/70"></i> ${metrics.views} Views</span>
+                                <span><i class="far fa-heart mr-1 text-red-400/70"></i> ${metrics.likes} Likes</span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function filterAndRender() {
+            const bentoHero = document.getElementById('bento-hero');
+            const listContainer = document.getElementById('posts-list');
+            const trendingContainer = document.getElementById('trending-list');
+            const filterStatus = document.getElementById('filter-status');
+            const tagNameSpan = document.getElementById('tag-name');
+            const heroSection = document.getElementById('hero-section');
+
+            let posts = [];
+            try {
+                let localData = localStorage.getItem('crypto_posts');
+                if (localData) posts = JSON.parse(localData);
+            } catch (e) {}
+
+            if (!Array.isArray(posts)) posts = [];
+            let publishedPosts = posts.filter(p => p.status === 'published').sort((a,b) => b.id - a.id);
+
+            // Trending List (Sắp xếp theo View ảo)
+            let trendHTML = '';
+            if(publishedPosts.length > 0) {
+                let trendingPosts = [...publishedPosts].sort((a,b) => getMetrics(b.id).rawLikes - getMetrics(a.id).rawLikes); 
+                trendingPosts.slice(0, 5).forEach((post, index) => {
+                    const metrics = getMetrics(post.id);
+                    trendHTML += `
+                        <a href="post.html?slug=${post.slug}" class="group p-3 rounded-2xl hover:bg-surface dark:hover:bg-darkSurface transition-all flex items-center gap-5">
+                            <span class="text-4xl font-black text-gray-300 dark:text-[#1a1a1e] group-hover:text-accent transition-colors duration-300 w-10 text-center shrink-0">0${index+1}</span>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold group-hover:text-accent transition-colors leading-snug line-clamp-2 mb-1">${post.title}</h4>
+                                <span class="text-[11px] text-textMuted dark:text-gray-500 font-medium">${index === 0 ? '<i class="fas fa-fire text-orange-500 mr-1"></i>' : ''}${metrics.views} Lượt xem</span>
+                            </div>
+                        </a>
+                    `;
+                });
+            } else {
+                trendHTML = '<p class="text-xs text-textMuted py-2">Chưa có dữ liệu</p>';
+            }
+            trendingContainer.innerHTML = trendHTML;
+
+            const hash = window.location.hash.substring(1);
+            let activeTag = null;
+            if (hash.startsWith('tag/')) activeTag = decodeURIComponent(hash.substring(4)).toUpperCase();
+
+            if (publishedPosts.length === 0) {
+                heroSection.style.display = 'none';
+                listContainer.innerHTML = '<p class="text-textMuted py-4 font-serif italic">Chưa có bài viết nào trên hệ thống.</p>';
+                return;
+            }
+
+            if (activeTag) {
+                heroSection.style.display = 'none';
+                filterStatus.classList.remove('hidden');
+                tagNameSpan.innerText = activeTag;
+                const filtered = publishedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag);
+                if(filtered.length === 0) listContainer.innerHTML = `<p class="p-10 text-center bg-surface dark:bg-darkSurface border border-gray-200 dark:border-white/5 rounded-2xl text-textMuted font-serif">Không tìm thấy bài viết cho chuyên mục <span class="font-sans font-bold">${activeTag}</span>.</p>`;
+                else renderList(filtered, listContainer);
+            } else {
+                heroSection.style.display = 'block';
+                filterStatus.classList.add('hidden');
+                renderBento(publishedPosts.slice(0, 3), bentoHero);
+                if (publishedPosts.length > 3) renderList(publishedPosts.slice(3), listContainer);
+                else listContainer.innerHTML = '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loadingSkeleton = document.getElementById('loading-skeleton');
+            const contentArea = document.getElementById('content-area');
+
+            try {
+                let posts = [];
+                let localData = localStorage.getItem('crypto_posts');
+                if (localData) { try { posts = JSON.parse(localData); } catch(e) {} }
+                if (!Array.isArray(posts) || posts.length === 0) {
+                    const response = await fetch('./data/posts.json');
+                    if (response.ok) {
+                        posts = await response.json();
+                        localStorage.setItem('crypto_posts', JSON.stringify(posts));
+                    }
+                }
+            } catch (error) {}
+            
+            filterAndRender();
+            loadingSkeleton.style.display = 'none';
+            contentArea.classList.remove('hidden');
+        });
+
+        window.addEventListener('hashchange', filterAndRender);
+
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > lastScrollY && window.scrollY > 100) nav.parentElement.style.transform = 'translateY(-150%)';
+            else nav.parentElement.style.transform = 'translateY(0)';
+            lastScrollY = window.scrollY;
+        });
+    </script>
+</body>
+</html>
