@@ -353,7 +353,7 @@
                 let localData = localStorage.getItem('crypto_posts');
                 if (localData) { try { posts = JSON.parse(localData); } catch(e) {} }
                 if (!Array.isArray(posts) || posts.length === 0) {
-                    const response = await fetch('./data/posts.json');
+                    const response = await fetch('./data/posts.json?v=' + new Date().getTime());
                     if (response.ok) {
                         posts = await response.json();
                         localStorage.setItem('crypto_posts', JSON.stringify(posts));
