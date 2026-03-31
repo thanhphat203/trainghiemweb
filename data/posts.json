@@ -1,10 +1,29 @@
 [
   {
+    "id": 1774977901361,
+    "title": "NhatMinhETH ",
+    "slug": "nhatminheth-",
+    "category": "Research",
+    "image": "https://i.ibb.co/YF7nzwvt/3aafd922c254.png",
+    "excerpt": "NhatMinhETH ",
+    "content": "**Nhìn bạn này tôi lại nghĩ đến con bò \n**\n\n\n![Image](https://i.ibb.co/YF7nzwvt/3aafd922c254.png)\n\n\n\nCác bạn thấy sao ? \n\n> Nếu thấy đúng thì thả like cho phát nhé",
+    "author": "Trading Insight Team",
+    "date": "2026-03-31T17:25:01.361Z",
+    "status": "published",
+    "tags": [
+      "Research"
+    ]
+  },
+  {
     "id": 1711900000000,
     "title": "Bitcoin Halving 2024: Phân Tích Dữ Liệu On-chain Và Tác Động Dài Hạn",
     "slug": "bitcoin-halving-2024-phan-tich-du-lieu-on-chain",
     "category": "ON-CHAIN",
-    "tags": ["Bitcoin", "Halving", "BTC"],
+    "tags": [
+      "Bitcoin",
+      "Halving",
+      "BTC"
+    ],
     "image": "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=1200&auto=format&fit=crop",
     "excerpt": "Sự kiện Halving lần thứ 4 của Bitcoin đang đến gần. Dựa trên các chỉ số MVRV và SOPR, liệu lịch sử có lặp lại với một siêu chu kỳ tăng trưởng mới?",
     "content": "## Tổng quan về Halving\n\nBitcoin halving là sự kiện phần thưởng khối dành cho thợ đào giảm đi một nửa, diễn ra mỗi 210,000 block (khoảng 4 năm một lần). Sự kiện tiếp theo dự kiến diễn ra vào tháng 4 năm 2024, giảm phần thưởng từ 6.25 BTC xuống còn 3.125 BTC.\n\n### Phân tích MVRV Z-Score\n\nChỉ số MVRV Z-Score hiện tại đang cho thấy dấu hiệu tích lũy mạnh mẽ từ các ví cá voi (whale wallets). Khi so sánh với các chu kỳ trước:\n\n1.  **Năm 2016:** Tích lũy kéo dài 6 tháng trước halving.\n2.  **Năm 2020:** Tích lũy đứt đoạn do cú sốc COVID-19 nhưng phục hồi nhanh.\n3.  **Hiện tại (2024):** Cấu trúc on-chain cho thấy lượng BTC di chuyển khỏi các sàn giao dịch đạt mức cao kỷ lục.\n\n![BTC Chart](https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=800&auto=format&fit=crop)\n\n### Nhận định thị trường\n\nSự tham gia của các tổ chức tài chính thông qua Bitcoin ETF Spot đã thay đổi hoàn toàn cục diện thanh khoản. Khác với 2020, lực mua hiện tại đến từ dòng tiền vĩ mô nhiều hơn là retail FOMO.",
@@ -17,7 +36,12 @@
     "title": "Bản Cập Nhật Dencun Của Ethereum Đã Giảm Phí L2 Như Thế Nào?",
     "slug": "ban-cap-nhat-dencun-cua-ethereum",
     "category": "NEWS",
-    "tags": ["Ethereum", "Layer 2", "Dencun", "ETH"],
+    "tags": [
+      "Ethereum",
+      "Layer 2",
+      "Dencun",
+      "ETH"
+    ],
     "image": "https://images.unsplash.com/photo-1622737133809-d95047b9e673?q=80&w=1200&auto=format&fit=crop",
     "excerpt": "EIP-4844 (Proto-Danksharding) đã chính thức được triển khai trên mainnet. Phí giao dịch trên Arbitrum, Optimism và Base đã giảm đáng kể.",
     "content": "## EIP-4844 là gì?\n\nBản cập nhật Dencun mang đến một tính năng được mong chờ từ lâu: **Blob-carrying transactions**. Thay vì lưu trữ dữ liệu calldata đắt đỏ mãi mãi trên chuỗi, các Layer 2 giờ đây có thể gửi dữ liệu dưới dạng \"blob\" tạm thời.\n\n### Tác động đến Layer 2 Rollups\n\n-   **Arbitrum:** Phí giảm trung bình 80%.\n-   **Optimism:** Phí swap hiện tại chỉ còn dưới $0.01.\n-   **Base:** Sự bùng nổ của meme coin trên hệ sinh thái Base phần lớn nhờ vào việc phí gas gần như bằng không sau Dencun.\n\n> \"Dencun là bước ngoặt quan trọng nhất của Ethereum kể từ sự kiện The Merge, mở ra kỷ nguyên thực sự cho Layer 2.\"\n\n### Tương lai của hệ sinh thái ETH\n\nVới chi phí rẻ, các dApp như SocialFi và On-chain Gaming cuối cùng đã có cơ sở hạ tầng đủ tốt để mass adoption.",
@@ -30,7 +54,11 @@
     "title": "Phân Tích Dòng Tiền: Dấu Hiệu Phục Hồi Của Altcoin Season",
     "slug": "phan-tich-dong-tien-dau-hieu-phuc-hoi-altcoin",
     "category": "MARKETS",
-    "tags": ["Altcoin", "Market", "Trading"],
+    "tags": [
+      "Altcoin",
+      "Market",
+      "Trading"
+    ],
     "image": "https://images.unsplash.com/photo-1642104704074-907c0698cbd9?q=80&w=1200&auto=format&fit=crop",
     "excerpt": "Bitcoin Dominance (BTC.D) đang có dấu hiệu tạo đỉnh tại vùng kháng cự cứng. Liệu dòng tiền có chuẩn bị dịch chuyển sang các Altcoin vốn hóa vừa và nhỏ?",
     "content": "## Tổng quan thị trường\n\nTrong tuần qua, sự chững lại của Bitcoin quanh mốc kháng cự quan trọng đã tạo điều kiện cho một số hệ sinh thái nhỏ gọn vươn lên mạnh mẽ.\n\n### Chỉ báo kỹ thuật đáng chú ý\n\nChỉ số sức mạnh tương đối (RSI) trên khung thời gian ngày của TOTAL2 (Vốn hóa thị trường tiền điện tử trừ Bitcoin) đang bứt phá khỏi đường xu hướng giảm dài hạn. Đây thường là tín hiệu báo trước cho một chu kỳ tăng trưởng của Altcoin (Altcoin Season).\n\n- Kháng cự tiếp theo: $1.2 Trillion\n- Hỗ trợ quan trọng: $950 Billion\n\nChúng tôi khuyến nghị nhà đầu tư quản lý rủi ro nghiêm ngặt và tập trung vào các dự án có nền tảng cơ bản tốt.",
@@ -38,12 +66,16 @@
     "date": "2024-03-29T08:15:00Z",
     "status": "published"
   },
-   {
+  {
     "id": 1711600000000,
     "title": "Báo Cáo Messari: Tổng Quan Tình Hình Đầu Tư Crypto Q1/2024",
     "slug": "bao-cao-messari-tong-quan-dau-tu-q1-2024",
     "category": "RESEARCH",
-    "tags": ["VC", "Investment", "Report"],
+    "tags": [
+      "VC",
+      "Investment",
+      "Report"
+    ],
     "image": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1200&auto=format&fit=crop",
     "excerpt": "Dòng vốn đầu tư mạo hiểm (VC) đang có dấu hiệu quay trở lại mạnh mẽ. Đâu là những mảng (narratives) đang thu hút dòng tiền thông minh nhất?",
     "content": "Nội dung bài viết báo cáo...",
