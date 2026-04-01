@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Trading Insight - Phân tích chuyên sâu & Dữ liệu On-chain</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -354,32 +359,29 @@
             const contentArea = document.getElementById('content-area');
 
             try {
-                // Luôn fetch từ server với cache-bust để lấy dữ liệu mới nhất
-                const cacheBust = `?_=${Date.now()}`;
-                const response = await fetch('./data/posts.json' + cacheBust);
+                // Luôn fetch từ server với cache-bust để chống cache
+                const cacheBust = `?v=${new Date().getTime()}`;
+                const response = await fetch('./data/posts.json' + cacheBust, { cache: 'no-store' });
+                
                 if (response.ok) {
                     const serverPosts = await response.json();
 
-                    // Lấy bài viết đang có trong localStorage (do Admin tạo)
                     let localPosts = [];
                     try { localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]'); } catch(e) {}
                     if (!Array.isArray(localPosts)) localPosts = [];
 
-                    // Merge: server là nền, bài local (ID không trùng server) được thêm vào
                     const serverIds = new Set(serverPosts.map(p => String(p.id)));
-                    const localOnlyPosts = localPosts.filter(p => !serverIds.has(String(p.id)));
+                    // CHỐNG HỒI SINH BÀI ĐÃ XÓA: Chỉ giữ lại bài NHÁP không có trên Server. Bài Publish mất trên Server sẽ bị xóa dưới Local.
+                    const localOnlyPosts = localPosts.filter(p => p.status !== 'published' && !serverIds.has(String(p.id)));
+                    
                     const merged = [...serverPosts, ...localOnlyPosts];
-
-                    // Lưu lại merged để các trang khác (post.html) đọc được
                     localStorage.setItem('crypto_posts', JSON.stringify(merged));
                 } else {
-                    // Nếu không fetch được server, dùng localStorage làm dự phòng
                     if (!localStorage.getItem('crypto_posts')) {
                         console.warn('Không thể tải posts.json và localStorage rỗng.');
                     }
                 }
             } catch (error) {
-                // Lỗi mạng: giữ nguyên localStorage hiện tại làm dự phòng
                 console.warn('Fetch posts.json thất bại, dùng cache localStorage:', error);
             }
             
