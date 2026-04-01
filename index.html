@@ -349,17 +349,34 @@
             const contentArea = document.getElementById('content-area');
 
             try {
-                let posts = [];
-                let localData = localStorage.getItem('crypto_posts');
-                if (localData) { try { posts = JSON.parse(localData); } catch(e) {} }
-                if (!Array.isArray(posts) || posts.length === 0) {
-                    const response = await fetch('./data/posts.json?v=' + new Date().getTime());
-                    if (response.ok) {
-                        posts = await response.json();
-                        localStorage.setItem('crypto_posts', JSON.stringify(posts));
+                // Luôn fetch từ server với cache-bust để lấy dữ liệu mới nhất
+                const cacheBust = `?_=${Date.now()}`;
+                const response = await fetch('./data/posts.json' + cacheBust);
+                if (response.ok) {
+                    const serverPosts = await response.json();
+
+                    // Lấy bài viết đang có trong localStorage (do Admin tạo)
+                    let localPosts = [];
+                    try { localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]'); } catch(e) {}
+                    if (!Array.isArray(localPosts)) localPosts = [];
+
+                    // Merge: server là nền, bài local (ID không trùng server) được thêm vào
+                    const serverIds = new Set(serverPosts.map(p => String(p.id)));
+                    const localOnlyPosts = localPosts.filter(p => !serverIds.has(String(p.id)));
+                    const merged = [...serverPosts, ...localOnlyPosts];
+
+                    // Lưu lại merged để các trang khác (post.html) đọc được
+                    localStorage.setItem('crypto_posts', JSON.stringify(merged));
+                } else {
+                    // Nếu không fetch được server, dùng localStorage làm dự phòng
+                    if (!localStorage.getItem('crypto_posts')) {
+                        console.warn('Không thể tải posts.json và localStorage rỗng.');
                     }
                 }
-            } catch (error) {}
+            } catch (error) {
+                // Lỗi mạng: giữ nguyên localStorage hiện tại làm dự phòng
+                console.warn('Fetch posts.json thất bại, dùng cache localStorage:', error);
+            }
             
             filterAndRender();
             loadingSkeleton.style.display = 'none';
