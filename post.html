@@ -170,7 +170,21 @@
                 document.getElementById('post-image').src = post.image;
                 document.getElementById('img-container').classList.remove('hidden');
             }
+            // Cấu hình marked.js để hiển thị tốt Table, ngắt dòng chuẩn và cho phép render thẻ HTML nhúng (YouTube/Twitter)
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+            });
             document.getElementById('post-content').innerHTML = marked.parse(post.content || '');
+            
+            // Tự động load script của Twitter nếu trong bài có nhúng Tweet
+            if(post.content && post.content.includes('twitter-tweet')) {
+                const script = document.createElement('script');
+                script.src = "https://platform.twitter.com/widgets.js";
+                script.async = true;
+                script.charset = "utf-8";
+                document.body.appendChild(script);
+            }
 
             if(post.tags && post.tags.length) {
                 document.getElementById('post-tags').innerHTML = post.tags.map(tag => `<span class="tag-badge">#${escapeHtml(tag.trim())}</span>`).join('');
