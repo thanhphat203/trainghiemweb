@@ -1,5 +1,20 @@
 [
   {
+    "id": 1775014323734,
+    "title": "Test Data",
+    "slug": "test-data",
+    "category": "Research",
+    "image": "https://i.postimg.cc/ncq7PFvv/0379c0b8_0e2d_49df_94e5_fc5f491ff0d2.jpg",
+    "excerpt": "",
+    "content": "> **Test thử**\n\nChào mừng các con gà quay lại crypto",
+    "author": "Trading Insight Team",
+    "date": "2026-04-01T03:32:03.734Z",
+    "status": "published",
+    "tags": [
+      "Research"
+    ]
+  },
+  {
     "id": 1775012938013,
     "title": "Trải nghiệm thử code",
     "slug": "trai-nghiem-thu-code",
