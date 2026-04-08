@@ -4,223 +4,405 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2300e58f' d='M211.5 5.5c24.5-7.3 50.5-7.3 75 0l160 48c22.4 6.7 37.5 27.6 37.5 50.5s-15.1 43.8-37.5 50.5l-160 48c-24.5 7.3-50.5 7.3-75 0l-160-48C29.1 147.8 14 126.9 14 104s15.1-43.8 37.5-50.5l160-48zM14 266.3l48.4-14.5c21.8 19 50 31.8 81 37.8L59.2 314.8C36.8 321.5 21.7 342.4 21.7 365.3s15.1 43.8 37.5 50.5l160 48c24.5 7.3 50.5 7.3 75 0l160-48c22.4-6.7 37.5-27.6 37.5-50.5s-15.1-43.8-37.5-50.5l-84.2-25.2c31-6 59.2-18.8 81-37.8l48.4 14.5c22.4 6.7 37.5 27.6 37.5 50.5s-15.1 43.8-37.5 50.5l-160 48c-24.5 7.3-50.5 7.3-75 0l-160-48C29.1 395.8 14 374.9 14 352s15.1-43.8 37.5-50.5z'/%3E%3C/svg%3E">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <title>Trading Insight - Phân tích chuyên sâu & Dữ liệu On-chain</title>
+    <title>Trading Insight | Chuyên trang Dữ liệu & Phân tích On-chain</title>
+    
+    <script>
+        if (window.location.pathname.endsWith('index.html')) {
+            let newUrl = window.location.pathname.replace('/index.html', '/') + window.location.search + window.location.hash;
+            window.history.replaceState(null, '', newUrl);
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        background: '#ffffff', surface: '#f3f4f6', surfaceHover: '#e5e7eb',
-                        darkBg: '#050505', darkSurface: '#0f0f11', darkSurfaceHover: '#1a1a1e',
-                        textMain: '#111827', textMuted: '#6b7280',
-                        darkTextMain: '#f8fafc', darkTextMuted: '#8b8b93',
+                        background: '#f8fafc', surface: '#ffffff', surfaceHover: '#f8fafc',
+                        darkBg: '#09090b', darkSurface: '#121214', darkSurfaceHover: '#18181b',
+                        textMain: '#1e293b', textMuted: '#64748b',
+                        darkTextMain: '#f1f5f9', darkTextMuted: '#94a3b8',
                         accent: '#00e58f',
+                        accentGlow: 'rgba(0, 229, 143, 0.15)',
                     },
-                    fontFamily: { sans: ['"Inter"', 'sans-serif'], serif: ['"Lora"', 'serif'], }
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], serif: ['"Lora"', 'serif'] },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(15px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
-        body { transition: background-color 0.3s, color 0.3s; }
-        ::selection { background-color: #00e58f; color: #050505; }
+        /* Base */
+        body { transition: background-color 0.8s ease, color 0.8s ease; overflow-x: hidden; }
+        ::selection { background-color: #00e58f; color: #000; }
 
-        .floating-nav { background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1); }
-        .dark .floating-nav { background: rgba(15,15,17,0.8); border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8); }
+        /* Background Grid Pattern */
+        .bg-grid-pattern {
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            transition: opacity 0.8s ease; opacity: 0;
+        }
+        .dark .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            opacity: 1;
+        }
 
-        .premium-card { background: linear-gradient(180deg,#ffffff 0%,#f9fafb 100%); border: 1px solid rgba(0,0,0,0.05); transition: all 0.5s cubic-bezier(0.16,1,0.3,1); position: relative; }
-        .dark .premium-card { background: linear-gradient(180deg,rgba(20,20,22,1) 0%,rgba(15,15,17,1) 100%); border: 1px solid rgba(255,255,255,0.05); }
-        .premium-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); border-color: rgba(0,229,143,0.3); }
-        .dark .premium-card:hover { box-shadow: 0 20px 40px -15px rgba(0,229,143,0.1); border-color: rgba(0,229,143,0.2); }
+        /* Particle Effects */
+        #particles-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
+        .particle {
+            position: absolute; bottom: -10px;
+            background: rgba(0, 229, 143, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+            box-shadow: 0 0 10px rgba(0, 229, 143, 0.4);
+        }
+        .dark .particle { background: rgba(0, 229, 143, 0.4); box-shadow: 0 0 15px rgba(0, 229, 143, 0.2); }
+        @keyframes floatUp {
+            to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
 
-        .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .dark .ticker-wrap { border-bottom: 1px solid rgba(255,255,255,0.03); }
+        /* Premium Glass Navbar */
+        .floating-nav { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.03); 
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .dark .floating-nav { 
+            background: rgba(18, 18, 20, 0.7); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3); 
+        }
+
+        /* Ultimate Card Styling */
+        .premium-card { 
+            background: var(--surface); 
+            border: 1px solid rgba(0,0,0,0.03); 
+            transition: all 0.6s cubic-bezier(0.16,1,0.3,1); 
+        }
+        .dark .premium-card { 
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.03); 
+            box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.02); 
+        }
+        .premium-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05); 
+            border-color: rgba(0,229,143,0.3); 
+        }
+        .dark .premium-card:hover { 
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4), 0 0 40px -15px rgba(0,229,143,0.1); 
+            border-color: rgba(0,229,143,0.2); 
+            background: rgba(30, 30, 34, 0.7);
+        }
+
+        /* Smooth Ticker */
+        .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid rgba(0,0,0,0.03); background: #ffffff; transition: background-color 0.8s ease;}
+        .dark .ticker-wrap { border-bottom: 1px solid rgba(255,255,255,0.02); background: #09090b; }
         .ticker { display: inline-flex; white-space: nowrap; animation: ticker 40s linear infinite; }
-        .ticker:hover { animation-play-state: paused; }
-        .ticker-item { padding: 0.5rem 2.5rem; font-size: 0.8rem; color: #00e58f; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+        .ticker:hover { animation-play-state: paused; cursor: default; }
+        /* Cập nhật CSS cho ticker-item: thêm align-items và gap phù hợp hơn */
+        .ticker-item { padding: 0.6rem 2.5rem; font-size: 0.75rem; color: #00e58f; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem;}
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        .img-zoom-container { overflow: hidden; }
-        .img-zoom-container img { transition: transform 0.8s cubic-bezier(0.16,1,0.3,1); will-change: transform; }
-        .premium-card:hover .img-zoom-container img { transform: scale(1.03); }
+        /* Image Zoom Effect */
+        .img-zoom-container { overflow: hidden; position: relative; border-radius: inherit; }
+        .img-zoom-container img { transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform; }
+        .group:hover .img-zoom-container img { transform: scale(1.04); }
 
-        ::-webkit-scrollbar { width: 4px; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; transition: background 0.3s; }
         .dark ::-webkit-scrollbar-thumb { background: #27272a; }
         ::-webkit-scrollbar-thumb:hover { background: #00e58f; }
 
-        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* Animations */
+        .delay-1 { animation-delay: 0.15s; }
+        .delay-2 { animation-delay: 0.3s; }
 
+        /* Newsletter Button */
         .newsletter-btn {
-            width: 100%;
-            background: #111827;
-            color: #ffffff;
-            font-weight: 700;
-            padding: 0.875rem 1rem;
-            border-radius: 0.75rem;
-            transition: all 0.3s;
-            font-size: 0.875rem;
-            border: none;
-            cursor: pointer;
+            width: 100%; background: #1e293b; color: #ffffff; font-weight: 700; padding: 1.1rem; border-radius: 1.2rem;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); font-size: 0.9rem; border: none; cursor: pointer;
+            position: relative; overflow: hidden; z-index: 1;
         }
-        .dark .newsletter-btn { background: #ffffff; color: #050505; }
-        .newsletter-btn:hover { background: #00e58f !important; color: #050505 !important; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(0,229,143,0.35); }
+        .dark .newsletter-btn { background: #f8fafc; color: #09090b; }
+        .newsletter-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #00e58f; z-index: -1; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scaleX(0); transform-origin: left;
+        }
+        .newsletter-btn:hover::before { transform: scaleX(1); }
+        .newsletter-btn:hover { color: #09090b !important; transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,229,143,0.4); }
 
-        .trend-rank { font-size: 2.2rem; font-weight: 900; color: rgba(0,0,0,0.06); transition: color 0.3s; }
-        .dark .trend-rank { color: rgba(255,255,255,0.04); }
-        .group:hover .trend-rank { color: #00e58f; }
+        /* Trending Rank */
+        .trend-rank { font-size: 2.5rem; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(0,0,0,0.08); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
+        .dark .trend-rank { -webkit-text-stroke: 1px rgba(255,255,255,0.08); }
+        .group:hover .trend-rank { color: rgba(0,229,143,0.05); -webkit-text-stroke: 1px #00e58f; text-shadow: 0 0 15px rgba(0,229,143,0.15); transform: scale(1.05) translateX(3px); }
 
-        .like-meta { display: inline-flex; align-items: center; gap: 4px; }
-        .like-meta i { color: rgba(239,68,68,0.7); }
+        /* Ambient Background Glow */
+        @keyframes floatGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(3vw, -4vh) scale(1.05); }
+            66% { transform: translate(-2vw, 3vh) scale(0.95); }
+        }
+        .ambient-glow { position: fixed; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; animation: floatGlow 25s ease-in-out infinite; will-change: transform;}
+        .dark .ambient-glow { opacity: 0.3; }
+        .glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0,229,143,0.12) 0%, rgba(0,0,0,0) 70%); }
+        .glow-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(30,41,59,0.4) 0%, rgba(0,0,0,0) 70%); animation-delay: -12s; }
     </style>
 </head>
-<body class="bg-background text-textMain dark:bg-darkBg dark:text-darkTextMain antialiased flex flex-col min-h-screen transition-colors duration-300">
+<body class="bg-background text-textMain dark:bg-darkBg dark:text-darkTextMain antialiased flex flex-col min-h-screen relative selection:bg-accent selection:text-black">
+    
+    <div class="bg-grid-pattern"></div>
+    <div id="particles-container"></div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
 
-    <div class="ticker-wrap h-9 flex items-center bg-gray-50 dark:bg-[#050505]">
+    <div class="ticker-wrap h-11 flex items-center relative z-40">
         <div class="ticker">
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Phân tích chuyên sâu & Dữ liệu On-chain</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Cập nhật tin tức thị trường 24/7</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Dòng tiền thông minh </div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Phân tích chuyên sâu & Dữ liệu On-chain</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Cập nhật tin tức thị trường 24/7</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] mr-3 align-middle"></i>Dòng tiền thông minh </div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
         </div>
     </div>
 
-    <div class="sticky top-6 z-50 px-4 flex justify-center w-full pointer-events-none">
-        <header class="floating-nav w-full max-w-5xl rounded-full px-6 py-3 flex items-center justify-between pointer-events-auto transition-transform duration-500" id="navbar">
-            <a href="index.html" class="flex items-center gap-2 text-xl font-extrabold tracking-tight">
-                <span class="text-accent"><i class="fa-solid fa-layer-group"></i></span>
-                Trading<span class="text-textMuted dark:text-darkTextMuted font-medium">Insight</span>
+    <div class="sticky top-6 z-50 px-4 flex justify-center w-full pointer-events-none transition-transform duration-700 ease-in-out" id="nav-container">
+        <header class="floating-nav w-full max-w-6xl rounded-[1.5rem] px-7 py-4 flex items-center justify-between pointer-events-auto">
+            <a href="/" class="flex items-center gap-2 text-[1.65rem] font-extrabold tracking-tight group cursor-pointer interactive-el">
+                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.3)] group-hover:rotate-12 transition-transform duration-500"><i class="fa-solid fa-chart-pie"></i></span>
+                Trading<span class="text-textMuted dark:text-darkTextMuted font-medium group-hover:text-textMain dark:group-hover:text-white transition-colors duration-300">Insight</span>
             </a>
-            <nav class="hidden md:flex items-center gap-7 font-bold text-[12px] text-textMuted dark:text-darkTextMuted uppercase tracking-wider">
-                <a href="#tag/TIN TỨC" class="hover:text-accent transition-colors">Tin Tức</a>
-                <a href="#tag/KINH TẾ" class="hover:text-accent transition-colors">Kinh Tế</a>
-                <a href="#tag/TÀI CHÍNH" class="hover:text-accent transition-colors">Tài Chính</a>
-                <a href="#tag/PHÂN TÍCH" class="hover:text-accent transition-colors">Phân Tích</a>
-                <a href="#tag/THẾ GIỚI" class="hover:text-accent transition-colors">Thế Giới</a>
-                <a href="#tag/RESEARCH" class="hover:text-accent transition-colors">Research</a>
-                <a href="#tag/AIRDROP" class="hover:text-accent px-3 py-1 bg-accent/10 text-accent rounded-full border border-accent/20 transition-all hover:bg-accent hover:text-black">Airdrop</a>
+            
+            <nav class="hidden md:flex items-center gap-8 font-bold text-[13px] text-textMuted dark:text-darkTextMuted uppercase tracking-wider">
+                <a href="#" onclick="filterByTag('TIN TỨC', 'tin-tuc'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tin Tức</a>
+                <a href="#" onclick="filterByTag('KINH TẾ', 'kinh-te'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Kinh Tế</a>
+                <a href="#" onclick="filterByTag('TÀI CHÍNH', 'tai-chinh'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tài Chính</a>
+                <a href="#" onclick="filterByTag('PHÂN TÍCH', 'phan-tich'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Phân Tích</a>
+                <a href="#" onclick="filterByTag('RESEARCH', 'research'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Research</a>
+                <a href="#" onclick="filterByTag('AIRDROP', 'airdrop'); return false;" class="interactive-el px-5 py-2 bg-accent/10 text-accent rounded-xl border border-accent/20 transition-all duration-300 hover:bg-accent hover:text-black hover:shadow-[0_0_20px_rgba(0,229,143,0.2)] hover:-translate-y-0.5">Airdrop</a>
             </nav>
             <div class="flex items-center gap-3">
-                <button onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-surface dark:bg-darkSurface border border-gray-200 dark:border-white/5 flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:text-accent transition-all">
-                    <i class="fas fa-moon dark:hidden"></i>
-                    <i class="fas fa-sun hidden dark:inline text-yellow-400"></i>
+                <button onclick="toggleTheme()" class="interactive-el w-11 h-11 rounded-full bg-background dark:bg-darkSurface border border-gray-200 dark:border-white/5 flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:text-accent dark:hover:text-accent transition-colors duration-300 shadow-sm">
+                    <i class="fas fa-moon dark:hidden text-lg"></i>
+                    <i class="fas fa-sun hidden dark:inline text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)] text-lg"></i>
                 </button>
             </div>
         </header>
     </div>
 
-    <main class="flex-grow container mx-auto px-4 lg:px-8 pt-10 pb-20 max-w-[1300px]">
-        <div id="loading-skeleton" class="w-full mt-4">
+    <main class="flex-grow container mx-auto px-4 lg:px-8 pt-10 pb-24 max-w-[1300px] relative z-10">
+        
+        <div id="loading-skeleton" class="w-full mt-4 transition-opacity duration-500">
             <div class="animate-pulse flex space-x-4">
                 <div class="flex-1 space-y-6 py-1">
-                    <div class="h-[500px] bg-surface dark:bg-darkSurface rounded-3xl"></div>
-                    <div class="grid grid-cols-2 gap-5"><div class="h-[280px] bg-surface dark:bg-darkSurface rounded-3xl"></div><div class="h-[280px] bg-surface dark:bg-darkSurface rounded-3xl"></div></div>
+                    <div class="h-[550px] bg-surface dark:bg-darkSurface rounded-[2rem] border border-gray-100 dark:border-white/5"></div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="h-[300px] bg-surface dark:bg-darkSurface rounded-[2rem] border border-gray-100 dark:border-white/5"></div>
+                        <div class="h-[300px] bg-surface dark:bg-darkSurface rounded-[2rem] border border-gray-100 dark:border-white/5"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="content-area" class="hidden fade-in">
-            <section class="mb-20" id="hero-section">
-                <div class="flex items-center justify-between mb-8 px-1">
-                    <h2 class="text-2xl font-bold tracking-tight flex items-center gap-3">
-                        <i class="fab fa-hotjar text-accent text-xl animate-pulse"></i> Tiêu Điểm Nóng
+        <div id="content-area" class="opacity-0 transition-opacity duration-1000">
+            <section class="mb-20 animate-fade-in-up" id="hero-section">
+                <div class="flex items-center justify-between mb-8 px-2">
+                    <h2 class="text-[1.75rem] font-extrabold tracking-tight flex items-center gap-3">
+                        <div class="relative">
+                            <i class="fab fa-hotjar text-accent relative z-10"></i>
+                            <div class="absolute inset-0 bg-accent blur-xl opacity-40 animate-pulse-slow"></div>
+                        </div>
+                        Tiêu Điểm Thị Trường
                     </h2>
                 </div>
-                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-5 auto-rows-[280px] lg:auto-rows-[320px]"></div>
+                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[540px]">
+                </div>
             </section>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-                <div class="lg:col-span-8 space-y-10">
-                    <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/5 pb-6">
-                        <h2 class="text-xl font-bold tracking-tight">Bài Viết Mới Nhất</h2>
-                        <div id="filter-status" class="hidden flex items-center gap-3">
-                            <span class="text-xs text-textMuted dark:text-darkTextMuted font-medium tracking-wide">Đang hiển thị: <span id="tag-name" class="font-bold text-accent">...</span></span>
-                            <a href="index.html#latest" class="text-[10px] font-bold text-gray-500 dark:text-gray-400 hover:text-accent transition-colors bg-surface dark:bg-darkSurface px-2.5 py-1.5 rounded-full border border-gray-200 dark:border-white/10 uppercase tracking-widest"><i class="fas fa-times mr-1"></i> Xóa lọc</a>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+                
+                <div class="lg:col-span-8 space-y-8 animate-fade-in-up delay-1">
+                    <div class="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-6">
+                        <h2 class="text-2xl font-extrabold tracking-tight">Bài Viết Mới Nhất</h2>
+                        
+                        <div id="filter-status" class="hidden flex items-center gap-4 bg-surface dark:bg-darkSurface px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-300">
+                            <span class="text-xs text-textMuted dark:text-darkTextMuted font-medium">Đang xem: <span id="tag-name" class="font-bold text-accent bg-accent/10 px-2 py-1 rounded-md ml-1">...</span></span>
+                            <div class="w-px h-4 bg-gray-200 dark:bg-white/10"></div>
+                            <a href="#" onclick="clearFilter(); return false;" class="interactive-el text-[11px] font-bold text-gray-400 hover:text-red-400 transition-colors uppercase tracking-widest flex items-center gap-1.5"><i class="fas fa-times-circle text-sm"></i> Bỏ lọc</a>
                         </div>
                     </div>
-                    <div id="posts-list" class="flex flex-col gap-10 scroll-mt-32"></div>
+                    
+                    <div id="posts-list" class="flex flex-col gap-6 scroll-mt-32">
+                        </div>
                 </div>
 
-                <aside class="lg:col-span-4 space-y-12">
-                    <div class="premium-card p-8 rounded-3xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/20 transition-all duration-700 pointer-events-none"></div>
+                <aside class="lg:col-span-4 space-y-8 animate-fade-in-up delay-2">
+                    
+                    <div class="premium-card rounded-[2rem] p-8 md:p-10 relative overflow-hidden group">
+                        <div class="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/20 transition-all duration-1000 pointer-events-none"></div>
                         <div class="relative z-10">
-                            <span class="inline-block px-3 py-1 bg-accent/10 border border-accent/20 rounded-full text-[9px] font-bold tracking-widest uppercase text-accent mb-5"><i class="fas fa-envelope-open-text mr-1"></i> Bản tin độc quyền</span>
-                            <h3 class="text-2xl font-bold mb-3 tracking-tight">Nhận Insight Sớm Nhất</h3>
-                            <p class="text-sm text-textMuted dark:text-darkTextMuted mb-8 leading-relaxed font-serif">Tham gia cộng đồng và nhận tín hiệu dòng tiền smart money ngay qua email.</p>
-                            <form class="space-y-3" onsubmit="handleNewsletter(event)">
-                                <input type="email" id="newsletter-email" placeholder="Nhập email của bạn..." required
-                                    class="w-full bg-white dark:bg-[#050505] border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent/50 placeholder:text-gray-400 dark:placeholder:text-gray-600 transition-colors shadow-sm">
-                                <button type="submit" class="newsletter-btn">
-                                    <i class="fas fa-paper-plane mr-2 text-xs"></i>Đăng ký ngay
+                            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-extrabold tracking-widest uppercase text-accent mb-6 shadow-[0_0_15px_rgba(0,229,143,0.1)]">
+                                <i class="fas fa-gem animate-pulse"></i> Premium Insight
+                            </div>
+                            <h3 class="text-[1.75rem] font-extrabold mb-4 tracking-tight leading-[1.2]">Nắm Bắt Dòng Tiền Sớm Nhất</h3>
+                            <p class="text-[14px] text-textMuted dark:text-darkTextMuted mb-8 leading-relaxed font-serif opacity-90">Tham gia cộng đồng tinh hoa. Nhận báo cáo phân tích Onchain và tín hiệu Smart Money thẳng vào hộp thư của bạn.</p>
+                            <form class="space-y-4" onsubmit="handleNewsletter(event)">
+                                <div class="relative group/input">
+                                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within/input:text-accent transition-colors duration-300"></i>
+                                    <input type="email" id="newsletter-email" placeholder="Địa chỉ email của bạn..." required
+                                        class="w-full bg-background dark:bg-[#09090b] border border-gray-200 dark:border-white/5 rounded-2xl pl-11 pr-4 py-4 text-sm font-medium focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all shadow-inner">
+                                </div>
+                                <button type="submit" class="interactive-el newsletter-btn group/btn">
+                                    <span class="relative z-10 flex items-center justify-center">Tham gia ngay <i class="fas fa-arrow-right ml-2 text-xs group-hover/btn:translate-x-1 transition-transform duration-300"></i></span>
                                 </button>
                             </form>
-                            <p class="text-[10px] text-textMuted dark:text-darkTextMuted mt-4 text-center opacity-60"><i class="fas fa-shield-alt mr-1"></i>Không spam · Hủy bất kỳ lúc nào</p>
+                            <p class="text-[11px] font-medium text-textMuted dark:text-darkTextMuted mt-6 text-center flex items-center justify-center gap-1.5 opacity-70"><i class="fas fa-shield-check text-accent"></i> Cam kết không spam. Hủy bất cứ lúc nào.</p>
                         </div>
                     </div>
 
-                    <div>
-                        <h3 class="text-[11px] font-bold mb-6 tracking-widest uppercase text-textMuted dark:text-darkTextMuted border-b border-gray-200 dark:border-white/5 pb-4 flex items-center gap-2">
-                            <i class="fas fa-fire text-orange-500"></i> Đang thịnh hành
+                    <div class="premium-card rounded-[2rem] p-6 lg:p-8">
+                        <h3 class="text-xs font-extrabold mb-6 tracking-widest uppercase text-textMain dark:text-white border-b border-gray-100 dark:border-white/5 pb-5 flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-orange-500/10 flex items-center justify-center">
+                                <i class="fas fa-fire-flame-curved text-orange-400 text-xs"></i>
+                            </div> 
+                            Top Thịnh Hành
                         </h3>
-                        <div class="space-y-2 flex flex-col" id="trending-list"></div>
+                        <div class="space-y-1 flex flex-col" id="trending-list">
+                            </div>
                     </div>
                 </aside>
             </div>
         </div>
     </main>
 
-    <footer class="relative mt-10 border-t border-gray-200/50 dark:border-white/5 bg-gradient-to-b from-transparent to-gray-50 dark:to-[#050505] pt-16 pb-8 transition-colors duration-300">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[1px] bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
-
-        <div class="container mx-auto px-4 lg:px-8 max-w-[1300px] flex flex-col items-center text-center">
-            
-            <a href="index.html" class="flex items-center gap-2 text-2xl font-extrabold tracking-tight mb-5">
-                <span class="text-accent"><i class="fa-solid fa-layer-group"></i></span>
+    <footer class="relative mt-auto border-t border-gray-200 dark:border-white/5 bg-surface dark:bg-[#09090b] pt-24 pb-12 transition-colors duration-800 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
+        <div class="container mx-auto px-4 lg:px-8 max-w-[1300px] flex flex-col items-center text-center relative z-10">
+            <a href="/" class="flex items-center gap-2 text-3xl font-extrabold tracking-tight mb-6 cursor-pointer interactive-el">
+                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.2)]"><i class="fa-solid fa-chart-pie"></i></span>
                 Trading<span class="text-textMuted dark:text-darkTextMuted font-medium">Insight</span>
             </a>
             
-            <p class="text-[15px] text-textMuted dark:text-darkTextMuted max-w-lg leading-relaxed mb-8 font-serif">
-                Cung cấp góc nhìn vĩ mô và phân tích dữ liệu chuyên sâu. Giúp bạn tự tin làm chủ dòng tiền trong mọi quyết định đầu tư Crypto.
+            <p class="text-base text-textMuted dark:text-darkTextMuted max-w-xl leading-relaxed mb-10 font-serif opacity-80">
+                Mang đến góc nhìn vĩ mô sắc bén và dữ liệu Onchain độc quyền , đồng hành cùng bạn làm chủ cuộc chơi tài sản số 
             </p>
 
-            <div class="flex items-center justify-center gap-4 mb-14">
-                <a href="#" class="w-11 h-11 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-darkSurface flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent hover:text-black transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(0,229,143,0.3)]"><i class="fab fa-telegram-plane"></i></a>
-                <a href="#" class="w-11 h-11 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-darkSurface flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent hover:text-black transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(0,229,143,0.3)]"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="w-11 h-11 rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-darkSurface flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent hover:text-black transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(0,229,143,0.3)]"><i class="fab fa-youtube"></i></a>
+            <div class="flex items-center justify-center gap-4 mb-16">
+                <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-telegram-plane"></i></a>
+                <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-youtube"></i></a>
             </div>
 
-            <div class="w-full border-t border-gray-200 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-textMuted dark:text-gray-500 font-medium">
-                <p>&copy; 2026 Trading Insight. All rights reserved.</p>
-                <div class="flex gap-6 uppercase tracking-wider text-[10px]">
-                    <span class="hover:text-accent cursor-pointer transition-colors">Điều khoản</span>
-                    <span class="hover:text-accent cursor-pointer transition-colors">Bảo mật</span>
-                    <span class="hover:text-accent cursor-pointer transition-colors">Disclaimer</span>
+            <div class="w-full border-t border-gray-100 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] text-textMuted dark:text-gray-500 font-medium">
+                <p>&copy; 2026 Trading Insight</p>
+                <div class="flex gap-8 uppercase tracking-widest text-[10px] font-bold">
+                    <span class="interactive-el hover:text-accent cursor-pointer transition-colors duration-300">Điều khoản</span>
+                    <span class="interactive-el hover:text-accent cursor-pointer transition-colors duration-300">Bảo mật</span>
+                    <span class="interactive-el hover:text-accent cursor-pointer transition-colors duration-300">Miễn trừ trách nhiệm</span>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Hàm này dùng để chuyển trang ẩn URL (Tránh bị soi ở góc dưới màn hình)
-        function goToPost(slug) {
-            window.location.href = `post.html?slug=${slug}`;
+        // --- WEB AUDIO API (Tạo tiếng Click mượt mà) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playClickSound() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            // Tùy chỉnh tần số cho giống tiếng pop/bloop hiện đại
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        // ═══════════════════════════════════
-        // THEME
-        // ═══════════════════════════════════
+        // Lắng nghe sự kiện click toàn trang
+        document.addEventListener('click', (e) => {
+            // Chỉ phát tiếng khi bấm vào class 'interactive-el' hoặc các bài viết
+            if(e.target.closest('.interactive-el') || e.target.closest('.cursor-pointer')) {
+                playClickSound();
+            }
+        });
+
+        // --- HỆ THỐNG PARTICLES NHẸ NHÀNG ---
+        function initParticles() {
+            const container = document.getElementById('particles-container');
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random vị trí, kích thước và tốc độ
+                particle.style.left = Math.random() * 100 + 'vw';
+                const size = Math.random() * 3 + 2; // 2px đến 5px
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.animationDuration = (Math.random() * 5 + 6) + 's'; // Bay trong 6 - 11s
+                
+                container.appendChild(particle);
+                
+                // Dọn dẹp DOM sau khi bay xong để chống lag
+                setTimeout(() => { particle.remove(); }, 12000);
+            }, 600); // Cứ 600ms đẻ ra 1 đốm, không bị quá dày đặc
+        }
+
+        // MAPPING TAGS
+        const tagMap = {
+            'tin-tuc': 'TIN TỨC', 'kinh-te': 'KINH TẾ', 'tai-chinh': 'TÀI CHÍNH',
+            'phan-tich': 'PHÂN TÍCH', 'research': 'RESEARCH', 'airdrop': 'AIRDROP'
+        };
+
+        function goToPost(slug) { window.location.href = `post.html?slug=${slug}`; }
+
+        function filterByTag(realTag, urlTag) {
+            const url = new URL(window.location);
+            url.searchParams.set('category', urlTag);
+            window.history.pushState({}, '', url);
+            filterAndRender();
+        }
+
+        function clearFilter() {
+            const url = new URL(window.location);
+            url.searchParams.delete('category');
+            window.history.pushState({}, '', url.pathname);
+            filterAndRender();
+        }
+
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
@@ -228,154 +410,139 @@
         if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
         else document.documentElement.classList.add('dark');
 
-        // ═══════════════════════════════════
-        // VISITOR TRACKING 
-        // ═══════════════════════════════════
         (function trackVisit() {
             try {
                 const visits = JSON.parse(localStorage.getItem('site_visits') || '[]');
-                visits.push({
-                    page: 'index', title: 'Trang chủ', url: location.href, ts: Date.now(),
-                    ua: navigator.userAgent, ref: document.referrer || 'direct'
-                });
+                visits.push({ page: 'index', ts: Date.now() });
                 if (visits.length > 2000) visits.splice(0, visits.length - 2000);
                 localStorage.setItem('site_visits', JSON.stringify(visits));
-
-                const sessionKey = 'session_' + new Date().toDateString();
-                if (!sessionStorage.getItem('tracked')) {
-                    sessionStorage.setItem('tracked', '1');
-                    const sessions = JSON.parse(localStorage.getItem('site_sessions') || '[]');
-                    sessions.push({ ts: Date.now(), page: 'index', ua: navigator.userAgent });
-                    if (sessions.length > 5000) sessions.splice(0, 1000);
-                    localStorage.setItem('site_sessions', JSON.stringify(sessions));
-                }
             } catch(e) {}
         })();
 
-        // ═══════════════════════════════════
-        // METRICS
-        // ═══════════════════════════════════
         const formatDate = (dateString) => new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric' });
-        const getImg = (img) => (img && img.trim() !== '') ? img : 'https://images.unsplash.com/photo-1639762681485-074b7f4fc8fd?q=80&w=1200';
+        const getImg = (img) => (img && img.trim() !== '') ? img : 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1200';
 
-        function getMetrics(id, postDate) {
-            const numId = Number(id) || Date.now();
-            const seed = (numId % 10000) + 1234;
+        function getMetrics(id) {
+            const numId = Number(id) || 1;
+            const storageKey = `metrics_post_${numId}`;
+            const now = Date.now();
+            let metricsData = localStorage.getItem(storageKey);
+            let metrics;
 
-            let extraViews = parseInt(localStorage.getItem(`views_extra_${id}`)) || 0;
-            let extraLikes = parseInt(localStorage.getItem(`likes_extra_${id}`)) || 0;
-
-            const now = new Date();
-            const created = postDate ? new Date(postDate) : new Date('2025-01-01');
-            const daysDiff = Math.max(0, Math.floor((now - created) / 86400000));
-
-            let dailyViews = 0, dailyLikes = 0;
-            for (let d = 0; d <= daysDiff; d++) {
-                const daySeed = ((numId * 997 + d * 1301) % 100000);
-                dailyViews += 50 + (daySeed % 51); 
-                dailyLikes += 5 + (daySeed % 11);   
+            if (!metricsData) {
+                const seed = (numId * 997) % 10000;
+                metrics = { views: 1200 + seed + (numId % 500), likes: 120 + Math.floor(seed / 10), lastUpdated: now };
+            } else {
+                metrics = JSON.parse(metricsData);
+                const hoursPassed = (now - metrics.lastUpdated) / (1000 * 60 * 60);
+                if (hoursPassed >= 1) {
+                    metrics.views += Math.floor(hoursPassed * (Math.random() * 8 + 3));
+                    metrics.likes += Math.floor(hoursPassed * (Math.random() * 2));
+                    metrics.lastUpdated = now;
+                }
             }
-
-            let baseViews = ((seed * 7) % 8000 + 1500) + extraViews + dailyViews;
-            let baseLikes = ((seed * 3) % 500 + 150) + extraLikes + dailyLikes;
-            const score = baseViews * 0.4 + baseLikes * 3;
-
-            return {
-                views: baseViews.toLocaleString('vi-VN'),
-                likes: baseLikes.toLocaleString('vi-VN'),
-                rawViews: baseViews, rawLikes: baseLikes, score: score
-            };
+            localStorage.setItem(storageKey, JSON.stringify(metrics));
+            return { views: metrics.views.toLocaleString('vi-VN'), likes: metrics.likes.toLocaleString('vi-VN'), score: metrics.views * 0.4 + metrics.likes * 3 };
         }
 
-        // ═══════════════════════════════════
-        // RENDER BENTO HERO
-        // ═══════════════════════════════════
+        // RENDER BENTO CHUẨN BO GÓC MỚI (FIXED LAYOUT TỶ LỆ VÀNG)
         function renderBento(heroPosts, container) {
-            let bentoHTML = '';
-            if (heroPosts.length >= 1) {
-                const p1 = heroPosts[0];
-                const m = getMetrics(p1.id, p1.date);
-                bentoHTML += `
-                <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group rounded-3xl lg:col-span-8 lg:row-span-2 overflow-hidden flex flex-col justify-end p-8 md:p-12 img-zoom-container">
-                    <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-80 dark:opacity-100"></div>
-                    <div class="relative z-10 w-full max-w-2xl mt-auto">
-                        <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span class="bg-accent text-black text-[10px] font-extrabold px-3 py-1.5 rounded-full uppercase tracking-widest shadow-[0_0_15px_rgba(0,229,143,0.5)]">HOT</span>
-                            <span class="border border-white/30 text-white text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-md">${p1.category || 'TIN TỨC'}</span>
-                        </div>
-                        <h1 class="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-white mb-4 leading-tight group-hover:text-accent transition-colors duration-500 tracking-tight line-clamp-2">${p1.title}</h1>
-                        <div class="flex items-center gap-5 text-xs font-medium text-gray-300">
-                            <span><i class="far fa-clock mr-1"></i>${formatDate(p1.date)}</span>
-                            <span><i class="far fa-eye mr-1"></i>${m.views} lượt xem</span>
-                            <span><i class="far fa-heart mr-1 text-red-400"></i>${m.likes} thích</span>
-                        </div>
+            if (heroPosts.length === 0) return;
+
+            const p1 = heroPosts[0];
+            const m1 = getMetrics(p1.id);
+
+            // CỘT TRÁI: Khung bài viết chính to bự
+            let html = `
+            <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group lg:col-span-8 h-[450px] lg:h-full overflow-hidden flex flex-col justify-end p-8 md:p-10 img-zoom-container relative rounded-[2rem]">
+                <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-90 dark:opacity-50 transition-transform duration-1000">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/60 to-transparent opacity-90 dark:opacity-100 group-hover:via-[#09090b]/70 transition-all duration-700"></div>
+                <div class="relative z-10 w-full max-w-3xl mt-auto">
+                    <div class="flex flex-wrap items-center gap-3 mb-4">
+                        <span class="bg-accent text-black text-[11px] font-extrabold px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-[0_0_15px_rgba(0,229,143,0.4)] flex items-center gap-1.5"><i class="fas fa-bolt"></i> HOT</span>
+                        <span class="border border-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest backdrop-blur-md bg-white/5">${p1.category || 'TIN TỨC'}</span>
                     </div>
-                </div>`;
-            }
-            if (heroPosts.length >= 2) {
+                    <h1 class="text-[1.8rem] md:text-[2.4rem] lg:text-[2.6rem] font-extrabold text-white mb-4 leading-[1.2] group-hover:text-accent transition-colors duration-500 tracking-tight line-clamp-2 md:line-clamp-3">${p1.title}</h1>
+                    <div class="flex items-center gap-6 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        <span class="flex items-center gap-1.5"><i class="far fa-clock text-accent/70 text-sm"></i>${formatDate(p1.date)}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/70 text-sm"></i>${m1.views}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/80 text-sm"></i>${m1.likes}</span>
+                    </div>
+                </div>
+            </div>`;
+
+            // CỘT PHẢI: Chứa 2 bài viết nhỏ chia đôi chiều cao (flex-1)
+            if (heroPosts.length > 1) {
+                html += `<div class="lg:col-span-4 flex flex-col gap-6 h-[600px] lg:h-full">`;
+
                 const p2 = heroPosts[1];
-                const m2 = getMetrics(p2.id, p2.date);
-                bentoHTML += `
-                <div onclick="goToPost('${p2.slug}')" class="cursor-pointer premium-card group rounded-3xl lg:col-span-4 lg:row-span-1 overflow-hidden flex flex-col justify-end p-8 img-zoom-container">
-                    <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-50">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 dark:opacity-100"></div>
+                const m2 = getMetrics(p2.id);
+                html += `
+                <div onclick="goToPost('${p2.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-6 lg:p-7 img-zoom-container relative rounded-[1.8rem]">
+                    <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-40">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent opacity-90 dark:opacity-100 group-hover:from-[#09090b]/90 transition-all duration-700"></div>
                     <div class="relative z-10 mt-auto">
-                        <span class="text-accent text-[9px] font-bold uppercase tracking-widest mb-3 block drop-shadow-md">${p2.category || 'TIN TỨC'}</span>
-                        <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-accent transition-colors line-clamp-2 drop-shadow-md">${p2.title}</h3>
-                        <div class="flex items-center gap-3 text-[11px] text-gray-300 font-medium">
-                            <span><i class="far fa-eye mr-1"></i>${m2.views}</span>
-                            <span><i class="far fa-heart mr-1 text-red-400"></i>${m2.likes}</span>
+                        <span class="text-accent text-[9px] font-extrabold uppercase tracking-widest mb-2 block opacity-90">${p2.category || 'TIN TỨC'}</span>
+                        <h3 class="text-[1.1rem] md:text-[1.15rem] font-bold text-white mb-3 leading-snug group-hover:text-accent transition-colors duration-300 line-clamp-2">${p2.title}</h3>
+                        <div class="flex items-center gap-4 text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
+                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/50"></i>${m2.views}</span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m2.likes}</span>
                         </div>
                     </div>
                 </div>`;
-            }
-            if (heroPosts.length >= 3) {
-                const p3 = heroPosts[2];
-                const m3 = getMetrics(p3.id, p3.date);
-                bentoHTML += `
-                <div onclick="goToPost('${p3.slug}')" class="cursor-pointer premium-card group rounded-3xl lg:col-span-4 lg:row-span-1 overflow-hidden flex flex-col justify-end p-8 img-zoom-container bg-surface dark:bg-darkSurface">
-                    <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 dark:opacity-50">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 dark:opacity-100"></div>
-                    <div class="relative z-10 mt-auto">
-                        <span class="text-blue-400 text-[9px] font-bold uppercase tracking-widest mb-3 block drop-shadow-md">${p3.category || 'TIN TỨC'}</span>
-                        <h3 class="text-xl font-bold text-white mb-3 leading-snug group-hover:text-blue-400 transition-colors line-clamp-2 drop-shadow-md">${p3.title}</h3>
-                        <div class="flex items-center gap-3 text-[11px] text-gray-300 font-medium">
-                            <span><i class="far fa-eye mr-1"></i>${m3.views}</span>
-                            <span><i class="far fa-heart mr-1 text-red-400"></i>${m3.likes}</span>
+
+                if (heroPosts.length > 2) {
+                    const p3 = heroPosts[2];
+                    const m3 = getMetrics(p3.id);
+                    html += `
+                    <div onclick="goToPost('${p3.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-6 lg:p-7 img-zoom-container relative rounded-[1.8rem]">
+                        <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-40">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent opacity-90 dark:opacity-100 group-hover:from-[#09090b]/90 transition-all duration-700"></div>
+                        <div class="relative z-10 mt-auto">
+                            <span class="text-blue-400 text-[9px] font-extrabold uppercase tracking-widest mb-2 block opacity-90">${p3.category || 'PHÂN TÍCH'}</span>
+                            <h3 class="text-[1.1rem] md:text-[1.15rem] font-bold text-white mb-3 leading-snug group-hover:text-blue-400 transition-colors duration-300 line-clamp-2">${p3.title}</h3>
+                            <div class="flex items-center gap-4 text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
+                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-blue-400/50"></i>${m3.views}</span>
+                                <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m3.likes}</span>
+                            </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+                }
+                html += `</div>`;
             }
-            container.innerHTML = bentoHTML;
+            container.innerHTML = html;
         }
 
-        // ═══════════════════════════════════
-        // RENDER LIST
-        // ═══════════════════════════════════
+        // RENDER LIST UI MỚI
         function renderList(posts, container) {
             if (posts.length === 0) { container.innerHTML = ''; return; }
             let html = '';
             posts.forEach(post => {
-                const m = getMetrics(post.id, post.date);
+                const m = getMetrics(post.id);
                 html += `
-                <article class="group flex flex-col sm:flex-row gap-8 items-center border-b border-gray-200 dark:border-white/5 pb-10">
-                    <div onclick="goToPost('${post.slug}')" class="cursor-pointer w-full sm:w-[35%] aspect-[4/3] rounded-2xl overflow-hidden relative premium-card img-zoom-container shrink-0">
-                        <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-opacity">
-                    </div>
-                    <div class="flex-1 flex flex-col justify-center">
-                        <div class="flex items-center gap-3 text-[10px] font-semibold text-textMuted dark:text-darkTextMuted mb-4 uppercase tracking-widest">
-                            <span class="text-accent">${post.category || 'TIN TỨC'}</span>
-                            <span class="w-1 h-1 bg-gray-300 dark:bg-white/10 rounded-full"></span>
-                            <span>${formatDate(post.date)}</span>
+                <article class="group relative flex flex-col sm:flex-row gap-6 p-4 sm:p-5 rounded-[1.5rem] bg-surface dark:bg-[#121214] border border-gray-100 dark:border-white/5 hover:border-accent/30 dark:hover:border-accent/40 hover:shadow-xl dark:hover:shadow-[0_10px_40px_rgba(0,229,143,0.05)] transition-all duration-500 hover:-translate-y-1 overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom"></div>
+                    <div onclick="goToPost('${post.slug}')" class="cursor-pointer w-full sm:w-[260px] aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden relative img-zoom-container shrink-0 shadow-sm">
+                        <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-all duration-700">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-widest border border-white/10">${post.category || 'TIN TỨC'}</span>
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-3 leading-tight group-hover:text-accent transition-colors cursor-pointer" onclick="goToPost('${post.slug}')">
+                    </div>
+                    <div class="flex-1 flex flex-col justify-center py-1 w-full pr-2">
+                        <div class="flex items-center gap-3 text-[11px] font-medium text-textMuted dark:text-darkTextMuted mb-2.5 uppercase tracking-widest">
+                            <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt text-accent"></i> ${formatDate(post.date)}</span>
+                        </div>
+                        <h3 class="text-xl md:text-[1.25rem] font-extrabold mb-2.5 leading-snug text-textMain dark:text-white group-hover:text-accent transition-colors duration-300 cursor-pointer line-clamp-2" onclick="goToPost('${post.slug}')">
                             ${post.title}
                         </h3>
-                        <p class="text-[15px] text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed font-serif mb-4">${post.excerpt || ''}</p>
-                        <div class="flex items-center gap-5 text-[11px] text-textMuted dark:text-darkTextMuted font-medium">
-                            <span class="like-meta"><i class="far fa-eye text-accent/70"></i> ${m.views}</span>
-                            <span class="like-meta"><i class="far fa-heart"></i> ${m.likes}</span>
+                        <p class="text-[14px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4 opacity-90">${post.excerpt || 'Xem chi tiết bài viết và phân tích chuyên sâu tại Trading Insight...'}</p>
+                        <div class="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-white/5 pt-3.5">
+                            <div class="flex items-center gap-5 text-[11px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
+                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60 text-sm"></i> ${m.views}</span>
+                                <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60 text-sm"></i> ${m.likes}</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-accent flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">Đọc ngay <i class="fas fa-arrow-right"></i></span>
                         </div>
                     </div>
                 </article>`;
@@ -383,37 +550,28 @@
             container.innerHTML = html;
         }
 
-        // ═══════════════════════════════════
         // TRENDING
-        // ═══════════════════════════════════
         function renderTrending(publishedPosts, container) {
-            if (publishedPosts.length === 0) {
-                container.innerHTML = '<p class="text-xs text-textMuted py-2">Chưa có dữ liệu</p>';
-                return;
-            }
+            if (publishedPosts.length === 0) return;
             const sorted = [...publishedPosts]
-                .map(p => ({ ...p, _m: getMetrics(p.id, p.date) }))
+                .map(p => ({ ...p, _m: getMetrics(p.id) }))
                 .sort((a, b) => b._m.score - a._m.score)
                 .slice(0, 5);
 
             container.innerHTML = sorted.map((post, index) => `
-                <div onclick="goToPost('${post.slug}')" class="cursor-pointer group p-3 rounded-2xl hover:bg-surface dark:hover:bg-darkSurface transition-all flex items-center gap-5">
-                    <span class="trend-rank w-10 text-center shrink-0">0${index + 1}</span>
+                <div onclick="goToPost('${post.slug}')" class="cursor-pointer group p-4 rounded-[1.5rem] hover:bg-surfaceHover dark:hover:bg-[#18181b] border border-transparent dark:hover:border-white/5 transition-all duration-300 flex items-center gap-5">
+                    <span class="trend-rank w-12 text-center shrink-0 font-sans">0${index + 1}</span>
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-sm font-bold group-hover:text-accent transition-colors leading-snug line-clamp-2 mb-1">${post.title}</h4>
-                        <div class="flex items-center gap-3 text-[11px] text-textMuted dark:text-gray-500 font-medium">
-                            ${index === 0 ? '<i class="fas fa-fire text-orange-500 mr-0.5"></i>' : ''}
-                            <span><i class="far fa-eye mr-1"></i>${post._m.views}</span>
-                            <span><i class="far fa-heart mr-1 text-red-400/70"></i>${post._m.likes}</span>
+                        <h4 class="text-[14px] font-bold group-hover:text-accent transition-colors duration-300 leading-snug line-clamp-2 mb-2">${post.title}</h4>
+                        <div class="flex items-center gap-4 text-[10px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
+                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/40"></i>${post._m.views}</span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/40"></i>${post._m.likes}</span>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // ═══════════════════════════════════
-        // FILTER & RENDER ALL
-        // ═══════════════════════════════════
         function filterAndRender() {
             const bentoHero = document.getElementById('bento-hero');
             const listContainer = document.getElementById('posts-list');
@@ -423,24 +581,19 @@
             const heroSection = document.getElementById('hero-section');
 
             let posts = [];
-            try {
-                const localData = localStorage.getItem('crypto_posts');
-                if (localData) posts = JSON.parse(localData);
-            } catch(e) {}
-            if (!Array.isArray(posts)) posts = [];
-
+            try { const localData = localStorage.getItem('crypto_posts'); if (localData) posts = JSON.parse(localData); } catch(e) {}
             let publishedPosts = posts.filter(p => p.status === 'published').sort((a, b) => b.id - a.id);
 
             renderTrending(publishedPosts, trendingContainer);
 
-            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(window.location.search);
+            const urlCategory = params.get('category');
+            
             let activeTag = null;
-            if (hash.startsWith('tag/')) activeTag = decodeURIComponent(hash.substring(4)).toUpperCase();
-
-            if (publishedPosts.length === 0) {
-                heroSection.style.display = 'none';
-                listContainer.innerHTML = '<p class="text-textMuted py-4 font-serif italic">Chưa có bài viết nào trên hệ thống.</p>';
-                return;
+            if (urlCategory && tagMap[urlCategory]) {
+                activeTag = tagMap[urlCategory];
+            } else if (urlCategory) {
+                activeTag = urlCategory.toUpperCase().replace('-', ' ');
             }
 
             if (activeTag) {
@@ -448,77 +601,69 @@
                 filterStatus.classList.remove('hidden');
                 tagNameSpan.innerText = activeTag;
                 const filtered = publishedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag);
-                if (filtered.length === 0) {
-                    listContainer.innerHTML = `<p class="p-10 text-center bg-surface dark:bg-darkSurface border border-gray-200 dark:border-white/5 rounded-2xl text-textMuted font-serif">Không tìm thấy bài viết cho chuyên mục <span class="font-sans font-bold">${activeTag}</span>.</p>`;
-                } else {
-                    renderList(filtered, listContainer);
-                }
+                renderList(filtered, listContainer);
             } else {
                 heroSection.style.display = 'block';
                 filterStatus.classList.add('hidden');
                 renderBento(publishedPosts.slice(0, 3), bentoHero);
                 if (publishedPosts.length > 3) renderList(publishedPosts.slice(3), listContainer);
-                else listContainer.innerHTML = '';
             }
         }
 
-        // ═══════════════════════════════════
-        // NEWSLETTER
-        // ═══════════════════════════════════
         function handleNewsletter(e) {
             e.preventDefault();
-            const email = document.getElementById('newsletter-email').value;
-            try {
-                const subs = JSON.parse(localStorage.getItem('newsletter_subs') || '[]');
-                if (!subs.includes(email)) { subs.push(email); localStorage.setItem('newsletter_subs', JSON.stringify(subs)); }
-            } catch(err) {}
             const btn = e.target.querySelector('button[type=submit]');
-            btn.innerHTML = '<i class="fas fa-check mr-2"></i>Đã đăng ký thành công!';
-            btn.style.background = '#00e58f';
-            btn.style.color = '#050505';
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="relative z-10 flex items-center justify-center"><i class="fas fa-check-circle mr-2 text-lg"></i>Đã kích hoạt VIP!</span>';
+            btn.style.background = '#00e58f'; btn.style.color = '#09090b';
             setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-paper-plane mr-2 text-xs"></i>Đăng ký ngay';
-                btn.style.background = '';
-                btn.style.color = '';
+                btn.innerHTML = originalContent;
+                btn.style.background = ''; btn.style.color = '';
             }, 3000);
         }
 
-        // ═══════════════════════════════════
-        // INIT
-        // ═══════════════════════════════════
         document.addEventListener('DOMContentLoaded', async () => {
             const loadingSkeleton = document.getElementById('loading-skeleton');
             const contentArea = document.getElementById('content-area');
+            
+            // Khởi chạy Particle Effects
+            initParticles();
+
             try {
-                const cacheBust = `?v=${new Date().getTime()}`;
-                const response = await fetch('./data/posts.json' + cacheBust, { cache: 'no-store' });
+                const response = await fetch('./data/posts.json?v=' + new Date().getTime(), { cache: 'no-store' });
                 if (response.ok) {
                     const serverPosts = await response.json();
-                    let localPosts = [];
-                    try { localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]'); } catch(e) {}
-                    if (!Array.isArray(localPosts)) localPosts = [];
+                    let localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]');
                     const serverIds = new Set(serverPosts.map(p => String(p.id)));
                     const localOnlyPosts = localPosts.filter(p => p.status !== 'published' && !serverIds.has(String(p.id)));
-                    const merged = [...serverPosts, ...localOnlyPosts];
-                    localStorage.setItem('crypto_posts', JSON.stringify(merged));
-                } else {
-                    if (!localStorage.getItem('crypto_posts')) console.warn('Không thể tải posts.json.');
+                    localStorage.setItem('crypto_posts', JSON.stringify([...serverPosts, ...localOnlyPosts]));
                 }
-            } catch(error) {
-                console.warn('Fetch posts.json thất bại:', error);
-            }
+            } catch(e) {}
+            
             filterAndRender();
-            loadingSkeleton.style.display = 'none';
-            contentArea.classList.remove('hidden');
+            
+            loadingSkeleton.style.opacity = '0';
+            setTimeout(() => {
+                loadingSkeleton.style.display = 'none';
+                contentArea.classList.remove('hidden');
+                setTimeout(() => {
+                    contentArea.style.opacity = '1';
+                }, 50);
+            }, 500);
         });
 
-        window.addEventListener('hashchange', filterAndRender);
+        window.addEventListener('popstate', filterAndRender);
 
         let lastScrollY = window.scrollY;
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > lastScrollY && window.scrollY > 100) nav.parentElement.style.transform = 'translateY(-150%)';
-            else nav.parentElement.style.transform = 'translateY(0)';
+            const navContainer = document.getElementById('nav-container');
+            if (window.scrollY > lastScrollY && window.scrollY > 200) {
+                navContainer.style.transform = 'translateY(-150%)';
+                navContainer.style.opacity = '0';
+            } else {
+                navContainer.style.transform = 'translateY(0)';
+                navContainer.style.opacity = '1';
+            }
             lastScrollY = window.scrollY;
         });
     </script>
