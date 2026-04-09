@@ -26,8 +26,7 @@
                         darkBg: '#09090b', darkSurface: '#121214', darkSurfaceHover: '#18181b',
                         textMain: '#1e293b', textMuted: '#64748b',
                         darkTextMain: '#f1f5f9', darkTextMuted: '#94a3b8',
-                        accent: '#00e58f',
-                        accentGlow: 'rgba(0, 229, 143, 0.15)',
+                        accent: '#00e58f', accentGlow: 'rgba(0, 229, 143, 0.15)',
                     },
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'], serif: ['"Lora"', 'serif'] },
                     animation: {
@@ -45,147 +44,204 @@
         }
     </script>
     <style>
-        /* Base */
         body { transition: background-color 0.8s ease, color 0.8s ease; overflow-x: hidden; }
         ::selection { background-color: #00e58f; color: #000; }
 
-        /* Background Grid Pattern */
+        /* ═══ UNIVERSE CANVAS ═══ */
+        #star-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none;
+            opacity: 0; transition: opacity 1.2s ease;
+        }
+        html.dark #star-canvas { opacity: 1; }
+
+        /* ═══ NEBULA GLOWS ═══ */
+        .nebula { position: fixed; border-radius: 50%; filter: blur(130px); z-index: 1; pointer-events: none; opacity: 0; transition: opacity 1.5s ease; }
+        html.dark .nebula { opacity: 1; }
+        .nebula-1 { top: -15%; left: -10%; width: 55vw; height: 55vw; background: radial-gradient(circle, rgba(0,229,143,0.06) 0%, transparent 70%); animation: nebulaFloat 30s ease-in-out infinite; }
+        .nebula-2 { bottom: -30%; right: -15%; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(40,70,200,0.07) 0%, transparent 70%); animation: nebulaFloat 38s ease-in-out infinite reverse; }
+        .nebula-3 { top: 35%; right: 10%; width: 35vw; height: 35vw; background: radial-gradient(circle, rgba(180,50,255,0.03) 0%, transparent 70%); animation: nebulaFloat 26s ease-in-out infinite; animation-delay: -12s; }
+        @keyframes nebulaFloat {
+            0%,100% { transform: translate(0,0) scale(1); }
+            33% { transform: translate(3vw,-5vh) scale(1.06); }
+            66% { transform: translate(-3vw,4vh) scale(0.94); }
+        }
+
+        /* ═══ MOON SCENE ═══ */
+        #moon-scene {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 105px;
+            z-index: 25; pointer-events: none;
+            opacity: 0; transition: opacity 1.2s ease;
+        }
+        html.dark #moon-scene { opacity: 1; }
+        .moon-ground {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: linear-gradient(180deg, #09101e 0%, #13192c 100%);
+            border-top: 1px solid rgba(80,110,200,0.12);
+        }
+        .moon-ground::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(130,160,255,0.14) 25%, rgba(100,140,255,0.08) 60%, transparent);
+        }
+        .moon-crater {
+            position: absolute; border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.03);
+        }
+
+        /* ═══ ASTRONAUT DRAG & DROP ĐÃ FIX LỖI NỀN XÁM ═══ */
+        .moon-astronaut {
+            position: absolute;
+            width: 85px; height: 85px;
+            margin-left: -42.5px;
+            margin-bottom: -42.5px;
+            cursor: grab;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 30;
+            will-change: left, bottom, transform;
+            transition: transform 0.2s cubic-bezier(0.16,1,0.3,1);
+            pointer-events: auto; /* Để có thể kéo thả */
+        }
+        .moon-astronaut:active { cursor: grabbing; transform: scale(1.1); }
+        .moon-astronaut img {
+            width: 140%; height: 140%;
+            object-fit: contain;
+            pointer-events: none; /* Không cản trở event kéo của div cha */
+            user-select: none;
+            -webkit-user-drag: none;
+            /* Thêm bóng đổ mờ mờ cho xịn, xóa sạch mix-blend-mode gây lỗi */
+            filter: drop-shadow(0 0 10px rgba(0,229,143,0.3)); 
+        }
+
+        /* ═══ BG GRID ═══ */
         .bg-grid-pattern {
             position: fixed; inset: 0; z-index: -2; pointer-events: none;
             background-size: 50px 50px;
-            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.03) 1px, transparent 1px);
             mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
             transition: opacity 0.8s ease; opacity: 0;
         }
         .dark .bg-grid-pattern {
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-image: linear-gradient(to right, rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.018) 1px, transparent 1px);
             opacity: 1;
         }
 
-        /* Particle Effects */
-        #particles-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; overflow: hidden; }
-        .particle {
-            position: absolute; bottom: -10px;
-            background: rgba(0, 229, 143, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: floatUp linear forwards;
-            box-shadow: 0 0 10px rgba(0, 229, 143, 0.4);
+        /* ═══ TICKER ═══ */
+        .ticker-wrap { width:100%; overflow:hidden; border-bottom:1px solid rgba(0,0,0,0.03); background:#ffffff; transition:background-color 0.8s ease; }
+        .dark .ticker-wrap { border-bottom:1px solid rgba(255,255,255,0.02); background:#09090b; }
+        .ticker { display:inline-flex; white-space:nowrap; animation:ticker 40s linear infinite; }
+        .ticker:hover { animation-play-state:paused; cursor:default; }
+        .ticker-item { padding:0.6rem 2.5rem; font-size:0.72rem; color:#00e58f; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; display:flex; align-items:center; gap:0.75rem; }
+        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+        /* ═══ NAV ═══ */
+        .floating-nav {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(255,255,255,0.55);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.04);
+            transition: all 0.5s cubic-bezier(0.25,1,0.5,1);
         }
-        .dark .particle { background: rgba(0, 229, 143, 0.4); box-shadow: 0 0 15px rgba(0, 229, 143, 0.2); }
-        @keyframes floatUp {
-            to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        .dark .floating-nav {
+            background: rgba(14,14,18,0.72);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
         }
 
-        /* Premium Glass Navbar */
-        .floating-nav { 
-            background: rgba(255, 255, 255, 0.85); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.5); 
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.03); 
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        /* ═══ CARDS - NEON GLOW ═══ */
+        .premium-card {
+            background: var(--surface);
+            border: 1px solid rgba(0,0,0,0.04);
+            transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
         }
-        .dark .floating-nav { 
-            background: rgba(18, 18, 20, 0.7); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3); 
+        .dark .premium-card {
+            background: rgba(20,20,26,0.65);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.03);
         }
-
-        /* Ultimate Card Styling */
-        .premium-card { 
-            background: var(--surface); 
-            border: 1px solid rgba(0,0,0,0.03); 
-            transition: all 0.6s cubic-bezier(0.16,1,0.3,1); 
+        .premium-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08);
+            border-color: rgba(0,229,143,0.3);
         }
-        .dark .premium-card { 
-            background: rgba(24, 24, 27, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.03); 
-            box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.02); 
-        }
-        .premium-card:hover { 
-            transform: translateY(-4px); 
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05); 
-            border-color: rgba(0,229,143,0.3); 
-        }
-        .dark .premium-card:hover { 
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4), 0 0 40px -15px rgba(0,229,143,0.1); 
-            border-color: rgba(0,229,143,0.2); 
-            background: rgba(30, 30, 34, 0.7);
+        .dark .premium-card:hover {
+            box-shadow: 0 20px 50px -15px rgba(0,0,0,0.6), 0 0 35px rgba(0,229,143,0.15), inset 0 0 15px rgba(0,229,143,0.05);
+            border-color: rgba(0,229,143,0.4);
+            background: rgba(26,26,34,0.85);
         }
 
-        /* Smooth Ticker */
-        .ticker-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid rgba(0,0,0,0.03); background: #ffffff; transition: background-color 0.8s ease;}
-        .dark .ticker-wrap { border-bottom: 1px solid rgba(255,255,255,0.02); background: #09090b; }
-        .ticker { display: inline-flex; white-space: nowrap; animation: ticker 40s linear infinite; }
-        .ticker:hover { animation-play-state: paused; cursor: default; }
-        .ticker-item { padding: 0.6rem 2.5rem; font-size: 0.75rem; color: #00e58f; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem;}
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        /* ═══ IMG ZOOM ═══ */
+        .img-zoom-container { overflow:hidden; position:relative; border-radius:inherit; }
+        .img-zoom-container img { transition:transform 1.2s cubic-bezier(0.2,0.8,0.2,1); will-change:transform; }
+        .group:hover .img-zoom-container img { transform:scale(1.05); }
 
-        /* Image Zoom Effect */
-        .img-zoom-container { overflow: hidden; position: relative; border-radius: inherit; }
-        .img-zoom-container img { transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform; }
-        .group:hover .img-zoom-container img { transform: scale(1.04); }
+        /* ═══ SCROLLBAR ═══ */
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:#27272a; border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#00e58f; }
+        html:not(.dark) ::-webkit-scrollbar-thumb { background:#cbd5e1; }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; transition: background 0.3s; }
-        .dark ::-webkit-scrollbar-thumb { background: #27272a; }
-        ::-webkit-scrollbar-thumb:hover { background: #00e58f; }
-
-        /* Animations */
-        .delay-1 { animation-delay: 0.15s; }
-        .delay-2 { animation-delay: 0.3s; }
-
-        /* Newsletter Button */
+        /* ═══ NEWSLETTER ═══ */
         .newsletter-btn {
-            width: 100%; background: #1e293b; color: #ffffff; font-weight: 700; padding: 1.1rem; border-radius: 1.2rem;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); font-size: 0.9rem; border: none; cursor: pointer;
-            position: relative; overflow: hidden; z-index: 1;
+            width:100%; background:#1e293b; color:#ffffff; font-weight:700; padding:1.1rem;
+            border-radius:1.2rem; transition:all 0.5s cubic-bezier(0.16,1,0.3,1); font-size:0.9rem;
+            border:none; cursor:pointer; position:relative; overflow:hidden; z-index:1;
         }
-        .dark .newsletter-btn { background: #f8fafc; color: #09090b; }
+        .dark .newsletter-btn { background:#f8fafc; color:#09090b; }
         .newsletter-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #00e58f; z-index: -1; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: scaleX(0); transform-origin: left;
+            content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+            background:#00e58f; z-index:-1; transition:transform 0.5s cubic-bezier(0.16,1,0.3,1);
+            transform:scaleX(0); transform-origin:left;
         }
-        .newsletter-btn:hover::before { transform: scaleX(1); }
-        .newsletter-btn:hover { color: #09090b !important; transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(0,229,143,0.4); }
+        .newsletter-btn:hover::before { transform:scaleX(1); }
+        .newsletter-btn:hover { color:#09090b !important; transform:translateY(-2px); box-shadow:0 10px 30px -10px rgba(0,229,143,0.4); }
 
-        /* Trending Rank */
-        .trend-rank { font-size: 2.5rem; font-weight: 800; line-height: 1; color: transparent; -webkit-text-stroke: 1px rgba(0,0,0,0.08); transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative; }
-        .dark .trend-rank { -webkit-text-stroke: 1px rgba(255,255,255,0.08); }
-        .group:hover .trend-rank { color: rgba(0,229,143,0.05); -webkit-text-stroke: 1px #00e58f; text-shadow: 0 0 15px rgba(0,229,143,0.15); transform: scale(1.05) translateX(3px); }
+        /* ═══ TRENDING ═══ */
+        .trend-rank { font-size:2.5rem; font-weight:800; line-height:1; color:transparent; -webkit-text-stroke:1px rgba(0,0,0,0.08); transition:all 0.5s; }
+        .dark .trend-rank { -webkit-text-stroke:1px rgba(255,255,255,0.08); }
+        .group:hover .trend-rank { color:rgba(0,229,143,0.05); -webkit-text-stroke:1px #00e58f; text-shadow:0 0 15px rgba(0,229,143,0.15); transform:scale(1.05) translateX(3px); }
 
-        /* Ambient Background Glow */
-        @keyframes floatGlow {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(3vw, -4vh) scale(1.05); }
-            66% { transform: translate(-2vw, 3vh) scale(0.95); }
-        }
-        .ambient-glow { position: fixed; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0; transition: opacity 1.5s ease; pointer-events: none; animation: floatGlow 25s ease-in-out infinite; will-change: transform;}
-        .dark .ambient-glow { opacity: 0.3; }
-        .glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, rgba(0,229,143,0.12) 0%, rgba(0,0,0,0) 70%); }
-        .glow-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(30,41,59,0.4) 0%, rgba(0,0,0,0) 70%); animation-delay: -12s; }
+        /* Content z-index stack */
+        main, footer { position:relative; z-index:10; }
+        .ticker-wrap { position:relative; z-index:40; }
+
+        /* ═══ LIGHT MODE OVERRIDES ═══ */
+        html:not(.dark) #star-canvas { opacity:0 !important; }
+        html:not(.dark) #moon-scene { opacity:0 !important; }
+        html:not(.dark) .nebula { opacity:0 !important; }
     </style>
 </head>
 <body class="bg-background text-textMain dark:bg-darkBg dark:text-darkTextMain antialiased flex flex-col min-h-screen relative selection:bg-accent selection:text-black">
-    
+
+    <canvas id="star-canvas"></canvas>
+
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+
     <div class="bg-grid-pattern"></div>
-    <div id="particles-container"></div>
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
+
+    <div id="moon-scene">
+        <div class="moon-ground">
+            <div class="moon-crater" style="bottom:22px;left:10%;width:52px;height:14px;"></div>
+            <div class="moon-crater" style="bottom:30px;left:32%;width:28px;height:8px;"></div>
+            <div class="moon-crater" style="bottom:14px;left:55%;width:46px;height:13px;"></div>
+            <div class="moon-crater" style="bottom:25px;right:22%;width:62px;height:16px;"></div>
+            <div class="moon-crater" style="bottom:35px;right:45%;width:20px;height:6px;"></div>
+        </div>
+        </div>
 
     <div class="ticker-wrap h-11 flex items-center relative z-40">
         <div class="ticker">
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> SMART MONEY SIGNALS & ONCHAIN DATA</div>
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
-            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
+            <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> SMART MONEY SIGNALS & ONCHAIN DATA</div>
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> CẬP NHẬT TIN TỨC THỊ TRƯỜNG 24/7</div>
             <div class="ticker-item"><i class="fas fa-circle text-[6px] text-accent"></i> PHÂN TÍCH CHUYÊN SÂU & DỮ LIỆU ON-CHAIN</div>
         </div>
@@ -193,18 +249,17 @@
 
     <div class="sticky top-6 z-50 px-4 flex justify-center w-full pointer-events-none transition-transform duration-700 ease-in-out" id="nav-container">
         <header class="floating-nav w-full max-w-6xl rounded-[1.5rem] px-7 py-4 flex items-center justify-between pointer-events-auto">
-            <a href="/" class="flex items-center gap-2 text-[1.65rem] font-extrabold tracking-tight group cursor-pointer interactive-el">
-                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.3)] group-hover:rotate-12 transition-transform duration-500"><i class="fa-solid fa-chart-pie"></i></span>
-                Trading<span class="text-textMuted dark:text-darkTextMuted font-medium group-hover:text-textMain dark:group-hover:text-white transition-colors duration-300">Insight</span>
+            <a href="/" class="flex items-center gap-2 text-[1.65rem] font-extrabold tracking-tight group cursor-pointer interactive-el whitespace-nowrap">
+                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.5)] animate-pulse-slow group-hover:rotate-12 transition-transform duration-500"><i class="fa-solid fa-chart-pie"></i></span>
+                <span class="text-textMain dark:text-white">Trading<span class="text-accent font-medium transition-colors duration-300">Insight</span></span>
             </a>
-            
             <nav class="hidden md:flex items-center gap-8 font-bold text-[13px] text-textMuted dark:text-darkTextMuted uppercase tracking-wider">
-                <a href="#" onclick="filterByTag('TIN TỨC', 'tin-tuc'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tin Tức</a>
-                <a href="#" onclick="filterByTag('KINH TẾ', 'kinh-te'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Kinh Tế</a>
-                <a href="#" onclick="filterByTag('TÀI CHÍNH', 'tai-chinh'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tài Chính</a>
-                <a href="#" onclick="filterByTag('PHÂN TÍCH', 'phan-tich'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Phân Tích</a>
-                <a href="#" onclick="filterByTag('RESEARCH', 'research'); return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Research</a>
-                <a href="#" onclick="filterByTag('AIRDROP', 'airdrop'); return false;" class="interactive-el px-5 py-2 bg-accent/10 text-accent rounded-xl border border-accent/20 transition-all duration-300 hover:bg-accent hover:text-black hover:shadow-[0_0_20px_rgba(0,229,143,0.2)] hover:-translate-y-0.5">Airdrop</a>
+                <a href="#" onclick="filterByTag('TIN TỨC','tin-tuc');return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tin Tức</a>
+                <a href="#" onclick="filterByTag('KINH TẾ','kinh-te');return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Kinh Tế</a>
+                <a href="#" onclick="filterByTag('TÀI CHÍNH','tai-chinh');return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Tài Chính</a>
+                <a href="#" onclick="filterByTag('PHÂN TÍCH','phan-tich');return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Phân Tích</a>
+                <a href="#" onclick="filterByTag('RESEARCH','research');return false;" class="interactive-el hover:text-accent transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all hover:after:w-full">Research</a>
+                <a href="#" onclick="filterByTag('AIRDROP','airdrop');return false;" class="interactive-el px-5 py-2 bg-accent/10 text-accent rounded-xl border border-accent/20 transition-all duration-300 hover:bg-accent hover:text-black hover:shadow-[0_0_20px_rgba(0,229,143,0.25)] hover:-translate-y-0.5">Airdrop</a>
             </nav>
             <div class="flex items-center gap-3">
                 <button onclick="toggleTheme()" class="interactive-el w-11 h-11 rounded-full bg-background dark:bg-darkSurface border border-gray-200 dark:border-white/5 flex items-center justify-center text-textMuted dark:text-darkTextMuted hover:text-accent dark:hover:text-accent transition-colors duration-300 shadow-sm">
@@ -215,8 +270,8 @@
         </header>
     </div>
 
-    <main class="flex-grow container mx-auto px-4 lg:px-8 pt-10 pb-24 max-w-[1300px] relative z-10">
-        
+    <main class="flex-grow container mx-auto px-4 lg:px-8 pt-10 pb-36 max-w-[1300px] relative z-10">
+
         <div id="loading-skeleton" class="w-full mt-4 transition-opacity duration-500">
             <div class="animate-pulse flex space-x-4">
                 <div class="flex-1 space-y-6 py-1">
@@ -240,41 +295,35 @@
                         Tiêu Điểm Thị Trường
                     </h2>
                 </div>
-                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:h-[500px]">
-                </div>
+                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:h-[500px]"></div>
             </section>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
-                
                 <div class="lg:col-span-8 space-y-8 animate-fade-in-up delay-1">
                     <div class="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-6">
                         <h2 class="text-2xl font-extrabold tracking-tight">Bài Viết Mới Nhất</h2>
-                        
-                        <div id="filter-status" class="hidden flex items-center gap-4 bg-surface dark:bg-darkSurface px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-300">
+                        <div id="filter-status" class="hidden flex items-center gap-4 bg-surface dark:bg-darkSurface px-5 py-2.5 rounded-full border border-gray-100 dark:border-white/5 shadow-sm">
                             <span class="text-xs text-textMuted dark:text-darkTextMuted font-medium">Đang xem: <span id="tag-name" class="font-bold text-accent bg-accent/10 px-2 py-1 rounded-md ml-1">...</span></span>
                             <div class="w-px h-4 bg-gray-200 dark:bg-white/10"></div>
-                            <a href="#" onclick="clearFilter(); return false;" class="interactive-el text-[11px] font-bold text-gray-400 hover:text-red-400 transition-colors uppercase tracking-widest flex items-center gap-1.5"><i class="fas fa-times-circle text-sm"></i> Bỏ lọc</a>
+                            <a href="#" onclick="clearFilter();return false;" class="interactive-el text-[11px] font-bold text-gray-400 hover:text-red-400 transition-colors uppercase tracking-widest flex items-center gap-1.5"><i class="fas fa-times-circle text-sm"></i> Bỏ lọc</a>
                         </div>
                     </div>
-                    
-                    <div id="posts-list" class="flex flex-col gap-6 scroll-mt-32">
-                        </div>
+                    <div id="posts-list" class="flex flex-col gap-6 scroll-mt-32"></div>
                 </div>
 
                 <aside class="lg:col-span-4 space-y-8 animate-fade-in-up delay-2">
-                    
                     <div class="premium-card rounded-[2rem] p-8 md:p-10 relative overflow-hidden group">
-                        <div class="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/20 transition-all duration-1000 pointer-events-none"></div>
+                        <div class="absolute -top-24 -right-24 w-72 h-72 bg-accent/10 rounded-full blur-[80px] group-hover:bg-accent/15 transition-all duration-1000 pointer-events-none"></div>
                         <div class="relative z-10">
                             <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-accent/10 border border-accent/20 rounded-full text-[10px] font-extrabold tracking-widest uppercase text-accent mb-6 shadow-[0_0_15px_rgba(0,229,143,0.1)]">
                                 <i class="fas fa-gem animate-pulse"></i> Premium Insight
                             </div>
-                            <h3 class="text-[1.75rem] font-extrabold mb-4 tracking-tight leading-[1.2]">Nắm Bắt Dòng Tiền Sớm Nhất</h3>
+                            <h3 class="text-[1.7rem] font-extrabold mb-4 tracking-tight leading-[1.2]">Nắm Bắt Dòng Tiền Sớm Nhất</h3>
                             <p class="text-[14px] text-textMuted dark:text-darkTextMuted mb-8 leading-relaxed font-serif opacity-90">Tham gia cộng đồng tinh hoa. Nhận báo cáo phân tích Onchain và tín hiệu Smart Money thẳng vào hộp thư của bạn.</p>
                             <form class="space-y-4" onsubmit="handleNewsletter(event)">
                                 <div class="relative group/input">
                                     <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within/input:text-accent transition-colors duration-300"></i>
-                                    <input type="email" id="newsletter-email" placeholder="Địa chỉ email của bạn..." required
+                                    <input type="email" placeholder="Địa chỉ email của bạn..." required
                                         class="w-full bg-background dark:bg-[#09090b] border border-gray-200 dark:border-white/5 rounded-2xl pl-11 pr-4 py-4 text-sm font-medium focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all shadow-inner">
                                 </div>
                                 <button type="submit" class="interactive-el newsletter-btn group/btn">
@@ -289,35 +338,31 @@
                         <h3 class="text-xs font-extrabold mb-6 tracking-widest uppercase text-textMain dark:text-white border-b border-gray-100 dark:border-white/5 pb-5 flex items-center gap-2">
                             <div class="w-6 h-6 rounded-full bg-orange-500/10 flex items-center justify-center">
                                 <i class="fas fa-fire-flame-curved text-orange-400 text-xs"></i>
-                            </div> 
+                            </div>
                             Top Thịnh Hành
                         </h3>
-                        <div class="space-y-1 flex flex-col" id="trending-list">
-                            </div>
+                        <div class="space-y-1 flex flex-col" id="trending-list"></div>
                     </div>
                 </aside>
             </div>
         </div>
     </main>
 
-    <footer class="relative mt-auto border-t border-gray-200 dark:border-white/5 bg-surface dark:bg-[#09090b] pt-24 pb-12 transition-colors duration-800 overflow-hidden">
+    <footer class="relative mt-auto border-t border-gray-200 dark:border-white/5 bg-surface dark:bg-[#09090b] pt-24 pb-32 overflow-hidden z-10">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent"></div>
         <div class="container mx-auto px-4 lg:px-8 max-w-[1300px] flex flex-col items-center text-center relative z-10">
-            <a href="/" class="flex items-center gap-2 text-3xl font-extrabold tracking-tight mb-6 cursor-pointer interactive-el">
-                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.2)]"><i class="fa-solid fa-chart-pie"></i></span>
-                Trading<span class="text-textMuted dark:text-darkTextMuted font-medium">Insight</span>
+            <a href="/" class="flex items-center gap-2 text-3xl font-extrabold tracking-tight mb-6 cursor-pointer interactive-el whitespace-nowrap">
+                <span class="text-accent drop-shadow-[0_0_15px_rgba(0,229,143,0.3)]"><i class="fa-solid fa-chart-pie"></i></span>
+                <span class="text-textMain dark:text-white">Trading<span class="text-accent font-medium">Insight</span></span>
             </a>
-            
             <p class="text-base text-textMuted dark:text-darkTextMuted max-w-xl leading-relaxed mb-10 font-serif opacity-80">
-                Mang đến góc nhìn vĩ mô sắc bén và dữ liệu Onchain độc quyền , đồng hành cùng bạn làm chủ cuộc chơi tài sản số 
+                Mang đến góc nhìn vĩ mô sắc bén và dữ liệu Onchain độc quyền, đồng hành cùng bạn làm chủ cuộc chơi tài sản số
             </p>
-
             <div class="flex items-center justify-center gap-4 mb-16">
                 <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-telegram-plane"></i></a>
                 <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="interactive-el w-12 h-12 rounded-full border border-gray-100 dark:border-white/5 bg-background dark:bg-darkSurface flex items-center justify-center text-lg text-textMuted dark:text-darkTextMuted hover:border-accent hover:bg-accent/10 hover:text-accent transition-all duration-500 hover:-translate-y-1"><i class="fab fa-youtube"></i></a>
             </div>
-
             <div class="w-full border-t border-gray-100 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] text-textMuted dark:text-gray-500 font-medium">
                 <p>&copy; 2026 Trading Insight</p>
                 <div class="flex gap-8 uppercase tracking-widest text-[10px] font-bold">
@@ -330,331 +375,495 @@
     </footer>
 
     <script>
-        // --- WEB AUDIO API ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playClickSound() {
-            if(audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            
+    let audioCtx;
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+    function playClickSound() {
+        try {
+            const ctx = getAudioCtx();
+            if (ctx.state === 'suspended') ctx.resume();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            
-            osc.start(audioCtx.currentTime);
-            osc.stop(audioCtx.currentTime + 0.1);
-        }
+            osc.frequency.setValueAtTime(900, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+            osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.1);
+        } catch(e) {}
+    }
+    document.addEventListener('click', e => {
+        if (e.target.closest('.interactive-el') || e.target.closest('.cursor-pointer')) playClickSound();
+    });
 
-        document.addEventListener('click', (e) => {
-            if(e.target.closest('.interactive-el') || e.target.closest('.cursor-pointer')) {
-                playClickSound();
+    function toggleTheme() {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
+    else document.documentElement.classList.add('dark');
+
+    const formatDate = d => new Date(d).toLocaleDateString('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric' });
+    const getImg = img => (img && img.trim()) ? img : 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1200';
+
+    function getMetrics(id) {
+        const numId = Number(id) || 1;
+        const storageKey = `metrics_post_${numId}`;
+        const now = Date.now();
+        let metricsData = localStorage.getItem(storageKey);
+        let metrics;
+        if (!metricsData) {
+            const seed = (numId * 997) % 10000;
+            metrics = { views: 1200 + seed + (numId % 500), likes: 120 + Math.floor(seed / 10), lastUpdated: now };
+        } else {
+            metrics = JSON.parse(metricsData);
+            const hoursPassed = (now - metrics.lastUpdated) / (1000 * 60 * 60);
+            if (hoursPassed >= 1) {
+                metrics.views += Math.floor(hoursPassed * (Math.random() * 8 + 3));
+                metrics.likes += Math.floor(hoursPassed * (Math.random() * 2));
+                metrics.lastUpdated = now;
             }
-        });
-
-        // --- HỆ THỐNG PARTICLES ---
-        function initParticles() {
-            const container = document.getElementById('particles-container');
-            setInterval(() => {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.left = Math.random() * 100 + 'vw';
-                const size = Math.random() * 3 + 2; 
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.animationDuration = (Math.random() * 5 + 6) + 's';
-                container.appendChild(particle);
-                setTimeout(() => { particle.remove(); }, 12000);
-            }, 600); 
         }
+        localStorage.setItem(storageKey, JSON.stringify(metrics));
+        return { views: metrics.views.toLocaleString('vi-VN'), likes: metrics.likes.toLocaleString('vi-VN'), score: metrics.views * 0.4 + metrics.likes * 3 };
+    }
 
-        const tagMap = {
-            'tin-tuc': 'TIN TỨC', 'kinh-te': 'KINH TẾ', 'tai-chinh': 'TÀI CHÍNH',
-            'phan-tich': 'PHÂN TÍCH', 'research': 'RESEARCH', 'airdrop': 'AIRDROP'
-        };
+    const tagMap = { 'tin-tuc':'TIN TỨC','kinh-te':'KINH TẾ','tai-chinh':'TÀI CHÍNH','phan-tich':'PHÂN TÍCH','research':'RESEARCH','airdrop':'AIRDROP' };
+    function goToPost(slug) { window.location.href = `post.html?slug=${slug}`; }
+    function filterByTag(realTag, urlTag) {
+        const url = new URL(window.location);
+        url.searchParams.set('category', urlTag);
+        window.history.pushState({}, '', url);
+        filterAndRender();
+    }
+    function clearFilter() {
+        const url = new URL(window.location);
+        url.searchParams.delete('category');
+        window.history.pushState({}, '', url.pathname);
+        filterAndRender();
+    }
 
-        function goToPost(slug) { window.location.href = `post.html?slug=${slug}`; }
-
-        function filterByTag(realTag, urlTag) {
-            const url = new URL(window.location);
-            url.searchParams.set('category', urlTag);
-            window.history.pushState({}, '', url);
-            filterAndRender();
-        }
-
-        function clearFilter() {
-            const url = new URL(window.location);
-            url.searchParams.delete('category');
-            window.history.pushState({}, '', url.pathname);
-            filterAndRender();
-        }
-
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        }
-        if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark');
-        else document.documentElement.classList.add('dark');
-
-        (function trackVisit() {
-            try {
-                const visits = JSON.parse(localStorage.getItem('site_visits') || '[]');
-                visits.push({ page: 'index', ts: Date.now() });
-                if (visits.length > 2000) visits.splice(0, visits.length - 2000);
-                localStorage.setItem('site_visits', JSON.stringify(visits));
-            } catch(e) {}
-        })();
-
-        const formatDate = (dateString) => new Date(dateString).toLocaleDateString('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric' });
-        const getImg = (img) => (img && img.trim() !== '') ? img : 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1200';
-
-        function getMetrics(id) {
-            const numId = Number(id) || 1;
-            const storageKey = `metrics_post_${numId}`;
-            const now = Date.now();
-            let metricsData = localStorage.getItem(storageKey);
-            let metrics;
-
-            if (!metricsData) {
-                const seed = (numId * 997) % 10000;
-                metrics = { views: 1200 + seed + (numId % 500), likes: 120 + Math.floor(seed / 10), lastUpdated: now };
-            } else {
-                metrics = JSON.parse(metricsData);
-                const hoursPassed = (now - metrics.lastUpdated) / (1000 * 60 * 60);
-                if (hoursPassed >= 1) {
-                    metrics.views += Math.floor(hoursPassed * (Math.random() * 8 + 3));
-                    metrics.likes += Math.floor(hoursPassed * (Math.random() * 2));
-                    metrics.lastUpdated = now;
-                }
-            }
-            localStorage.setItem(storageKey, JSON.stringify(metrics));
-            return { views: metrics.views.toLocaleString('vi-VN'), likes: metrics.likes.toLocaleString('vi-VN'), score: metrics.views * 0.4 + metrics.likes * 3 };
-        }
-
-        // BẢN RENDER BENTO ĐÃ ĐƯỢC NÂNG CẤP (GỌN GÀNG, CHUYÊN NGHIỆP HƠN)
-        function renderBento(heroPosts, container) {
-            if (heroPosts.length === 0) return;
-
-            const p1 = heroPosts[0];
-            const m1 = getMetrics(p1.id);
-
-            // CỘT TRÁI: Khung bài viết chính - Chỉnh lại font, padding và gradient mượt hơn
-            let html = `
-            <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group lg:col-span-8 h-[400px] lg:h-full overflow-hidden flex flex-col justify-end p-6 md:p-8 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
-                <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000 ease-out">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/70 to-transparent transition-opacity duration-500"></div>
-                <div class="relative z-10 w-full max-w-3xl mt-auto">
-                    <div class="flex flex-wrap items-center gap-2 mb-3">
-                        <span class="bg-accent text-black text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-[0_0_10px_rgba(0,229,143,0.3)] flex items-center gap-1.5"><i class="fas fa-bolt"></i> HOT</span>
-                        <span class="border border-white/20 text-white text-[10px] font-medium px-2 py-1 rounded uppercase tracking-wider backdrop-blur-md bg-white/10">${p1.category || 'TIN TỨC'}</span>
-                    </div>
-                    <h1 class="text-2xl md:text-[1.75rem] lg:text-[2rem] font-bold text-white mb-3 leading-[1.35] group-hover:text-accent transition-colors duration-300 line-clamp-3 drop-shadow-lg">${p1.title}</h1>
-                    <div class="flex items-center gap-4 text-[11px] font-medium text-gray-300 uppercase tracking-wider">
-                        <span class="flex items-center gap-1.5"><i class="far fa-clock text-accent/80 text-sm"></i>${formatDate(p1.date)}</span>
-                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/80 text-sm"></i>${m1.views}</span>
-                        <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/80 text-sm"></i>${m1.likes}</span>
+    function renderBento(heroPosts, container) {
+        if (heroPosts.length === 0) return;
+        const p1 = heroPosts[0], m1 = getMetrics(p1.id);
+        let html = `
+        <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group lg:col-span-8 h-[400px] lg:h-full overflow-hidden flex flex-col justify-end p-6 md:p-8 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+            <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000 ease-out">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/65 to-transparent transition-opacity duration-500"></div>
+            <div class="relative z-10 w-full max-w-3xl mt-auto">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                    <span class="bg-accent text-black text-[10px] font-bold px-2.5 py-1 rounded uppercase tracking-wider shadow-[0_0_12px_rgba(0,229,143,0.4)] flex items-center gap-1.5"><i class="fas fa-bolt text-[8px]"></i> HOT</span>
+                    <span class="border border-white/20 text-white text-[10px] font-medium px-2.5 py-1 rounded uppercase tracking-wider backdrop-blur-md bg-white/10">${p1.category || 'TIN TỨC'}</span>
+                </div>
+                <h1 class="text-2xl md:text-[1.75rem] lg:text-[2rem] font-bold text-white mb-3 leading-[1.35] group-hover:text-accent transition-colors duration-300 line-clamp-3 drop-shadow-lg">${p1.title}</h1>
+                <div class="flex items-center gap-4 text-[11px] font-medium text-gray-300 uppercase tracking-wider">
+                    <span class="flex items-center gap-1.5"><i class="far fa-clock text-accent/80"></i>${formatDate(p1.date)}</span>
+                    <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/80"></i>${m1.views}</span>
+                    <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/80"></i>${m1.likes}</span>
+                </div>
+            </div>
+        </div>`;
+        if (heroPosts.length > 1) {
+            html += `<div class="lg:col-span-4 flex flex-col gap-5 h-[600px] lg:h-full">`;
+            const p2 = heroPosts[1], m2 = getMetrics(p2.id);
+            html += `<div onclick="goToPost('${p2.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+                <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent"></div>
+                <div class="relative z-10 mt-auto">
+                    <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block">${p2.category||'TIN TỨC'}</span>
+                    <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2">${p2.title}</h3>
+                    <div class="flex items-center gap-4 text-[10px] text-gray-300 font-medium uppercase tracking-wider">
+                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m2.views}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m2.likes}</span>
                     </div>
                 </div>
             </div>`;
-
-            // CỘT PHẢI: Chứa 2 bài viết nhỏ - Được canh đều, padding vừa phải, text drop-shadow
-            if (heroPosts.length > 1) {
-                html += `<div class="lg:col-span-4 flex flex-col gap-5 h-[600px] lg:h-full">`;
-
-                const p2 = heroPosts[1];
-                const m2 = getMetrics(p2.id);
-                html += `
-                <div onclick="goToPost('${p2.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
-                    <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
+            if (heroPosts.length > 2) {
+                const p3 = heroPosts[2], m3 = getMetrics(p3.id);
+                html += `<div onclick="goToPost('${p3.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+                    <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent"></div>
                     <div class="relative z-10 mt-auto">
-                        <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block drop-shadow-md">${p2.category || 'TIN TỨC'}</span>
-                        <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2 drop-shadow-md">${p2.title}</h3>
+                        <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block">${p3.category||'PHÂN TÍCH'}</span>
+                        <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2">${p3.title}</h3>
                         <div class="flex items-center gap-4 text-[10px] text-gray-300 font-medium uppercase tracking-wider">
-                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m2.views}</span>
-                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m2.likes}</span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m3.views}</span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m3.likes}</span>
                         </div>
                     </div>
                 </div>`;
-
-                if (heroPosts.length > 2) {
-                    const p3 = heroPosts[2];
-                    const m3 = getMetrics(p3.id);
-                    html += `
-                    <div onclick="goToPost('${p3.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
-                        <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent"></div>
-                        <div class="relative z-10 mt-auto">
-                            <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block drop-shadow-md">${p3.category || 'PHÂN TÍCH'}</span>
-                            <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2 drop-shadow-md">${p3.title}</h3>
-                            <div class="flex items-center gap-4 text-[10px] text-gray-300 font-medium uppercase tracking-wider">
-                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m3.views}</span>
-                                <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m3.likes}</span>
-                            </div>
-                        </div>
-                    </div>`;
-                }
-                html += `</div>`;
             }
-            container.innerHTML = html;
+            html += `</div>`;
         }
+        container.innerHTML = html;
+    }
 
-        // RENDER LIST
-        function renderList(posts, container) {
-            if (posts.length === 0) { container.innerHTML = ''; return; }
-            let html = '';
-            posts.forEach(post => {
-                const m = getMetrics(post.id);
-                html += `
-                <article class="group relative flex flex-col sm:flex-row gap-6 p-4 sm:p-5 rounded-[1.5rem] bg-surface dark:bg-[#121214] border border-gray-100 dark:border-white/5 hover:border-accent/30 dark:hover:border-accent/40 hover:shadow-xl dark:hover:shadow-[0_10px_40px_rgba(0,229,143,0.05)] transition-all duration-500 hover:-translate-y-1 overflow-hidden">
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom"></div>
-                    <div onclick="goToPost('${post.slug}')" class="cursor-pointer w-full sm:w-[260px] aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden relative img-zoom-container shrink-0 shadow-sm">
-                        <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                        <div class="absolute top-3 left-3">
-                            <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-widest border border-white/10">${post.category || 'TIN TỨC'}</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 flex flex-col justify-center py-1 w-full pr-2">
-                        <div class="flex items-center gap-3 text-[11px] font-medium text-textMuted dark:text-darkTextMuted mb-2.5 uppercase tracking-widest">
-                            <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt text-accent"></i> ${formatDate(post.date)}</span>
-                        </div>
-                        <h3 class="text-xl md:text-[1.25rem] font-extrabold mb-2.5 leading-snug text-textMain dark:text-white group-hover:text-accent transition-colors duration-300 cursor-pointer line-clamp-2" onclick="goToPost('${post.slug}')">
-                            ${post.title}
-                        </h3>
-                        <p class="text-[14px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4 opacity-90">${post.excerpt || 'Xem chi tiết bài viết và phân tích chuyên sâu tại Trading Insight...'}</p>
-                        <div class="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-white/5 pt-3.5">
-                            <div class="flex items-center gap-5 text-[11px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
-                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60 text-sm"></i> ${m.views}</span>
-                                <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60 text-sm"></i> ${m.likes}</span>
-                            </div>
-                            <span class="text-[11px] font-bold text-accent flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">Đọc ngay <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </div>
-                </article>`;
-            });
-            container.innerHTML = html;
-        }
-
-        // TRENDING
-        function renderTrending(publishedPosts, container) {
-            if (publishedPosts.length === 0) return;
-            const sorted = [...publishedPosts]
-                .map(p => ({ ...p, _m: getMetrics(p.id) }))
-                .sort((a, b) => b._m.score - a._m.score)
-                .slice(0, 5);
-
-            container.innerHTML = sorted.map((post, index) => `
-                <div onclick="goToPost('${post.slug}')" class="cursor-pointer group p-4 rounded-[1.5rem] hover:bg-surfaceHover dark:hover:bg-[#18181b] border border-transparent dark:hover:border-white/5 transition-all duration-300 flex items-center gap-5">
-                    <span class="trend-rank w-12 text-center shrink-0 font-sans">0${index + 1}</span>
-                    <div class="flex-1 min-w-0">
-                        <h4 class="text-[14px] font-bold group-hover:text-accent transition-colors duration-300 leading-snug line-clamp-2 mb-2">${post.title}</h4>
-                        <div class="flex items-center gap-4 text-[10px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
-                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/40"></i>${post._m.views}</span>
-                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/40"></i>${post._m.likes}</span>
-                        </div>
+    function renderList(posts, container) {
+        if (posts.length === 0) { container.innerHTML = ''; return; }
+        let html = '';
+        posts.forEach(post => {
+            const m = getMetrics(post.id);
+            html += `
+            <article class="group relative flex flex-col sm:flex-row gap-6 p-4 sm:p-5 rounded-[1.5rem] bg-surface dark:bg-[#121214] border border-gray-100 dark:border-white/5 hover:border-accent/30 dark:hover:border-accent/35 hover:shadow-xl dark:hover:shadow-[0_10px_40px_rgba(0,229,143,0.06)] transition-all duration-500 hover:-translate-y-1 overflow-hidden">
+                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom rounded-l-[1.5rem]"></div>
+                <div onclick="goToPost('${post.slug}')" class="cursor-pointer w-full sm:w-[260px] aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden relative img-zoom-container shrink-0 shadow-sm">
+                    <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-all duration-700">
+                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                    <div class="absolute top-3 left-3">
+                        <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-widest border border-white/10">${post.category||'TIN TỨC'}</span>
                     </div>
                 </div>
-            `).join('');
+                <div class="flex-1 flex flex-col justify-center py-1 w-full pr-2">
+                    <div class="flex items-center gap-3 text-[11px] font-medium text-textMuted dark:text-darkTextMuted mb-2.5 uppercase tracking-widest">
+                        <span class="flex items-center gap-1.5"><i class="far fa-calendar-alt text-accent"></i> ${formatDate(post.date)}</span>
+                    </div>
+                    <h3 class="text-xl md:text-[1.25rem] font-extrabold mb-2.5 leading-snug text-textMain dark:text-white group-hover:text-accent transition-colors duration-300 cursor-pointer line-clamp-2" onclick="goToPost('${post.slug}')">${post.title}</h3>
+                    <p class="text-[14px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4 opacity-90">${post.excerpt||'Xem chi tiết bài viết và phân tích chuyên sâu tại Trading Insight...'}</p>
+                    <div class="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-white/5 pt-3.5">
+                        <div class="flex items-center gap-5 text-[11px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
+                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60 text-sm"></i> ${m.views}</span>
+                            <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60 text-sm"></i> ${m.likes}</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-accent flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">Đọc ngay <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </article>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderTrending(publishedPosts, container) {
+        if (publishedPosts.length === 0) return;
+        const sorted = [...publishedPosts]
+            .map(p => ({ ...p, _m: getMetrics(p.id) }))
+            .sort((a, b) => b._m.score - a._m.score)
+            .slice(0, 5);
+        container.innerHTML = sorted.map((post, i) => `
+            <div onclick="goToPost('${post.slug}')" class="cursor-pointer group p-4 rounded-[1.5rem] hover:bg-surfaceHover dark:hover:bg-[#18181b] border border-transparent dark:hover:border-white/5 transition-all duration-300 flex items-center gap-5">
+                <span class="trend-rank w-12 text-center shrink-0 font-sans">0${i+1}</span>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-[14px] font-bold group-hover:text-accent transition-colors duration-300 leading-snug line-clamp-2 mb-2">${post.title}</h4>
+                    <div class="flex items-center gap-4 text-[10px] text-textMuted dark:text-gray-500 font-bold uppercase tracking-wider">
+                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/40"></i>${post._m.views}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/40"></i>${post._m.likes}</span>
+                    </div>
+                </div>
+            </div>`).join('');
+    }
+
+    function filterAndRender() {
+        const bentoHero = document.getElementById('bento-hero');
+        const listContainer = document.getElementById('posts-list');
+        const trendingContainer = document.getElementById('trending-list');
+        const filterStatus = document.getElementById('filter-status');
+        const tagNameSpan = document.getElementById('tag-name');
+        const heroSection = document.getElementById('hero-section');
+
+        let posts = [];
+        try { const d = localStorage.getItem('crypto_posts'); if (d) posts = JSON.parse(d); } catch(e) {}
+        let publishedPosts = posts.filter(p => p.status === 'published').sort((a, b) => b.id - a.id);
+        renderTrending(publishedPosts, trendingContainer);
+
+        const params = new URLSearchParams(window.location.search);
+        const urlCategory = params.get('category');
+        let activeTag = null;
+        if (urlCategory && tagMap[urlCategory]) activeTag = tagMap[urlCategory];
+        else if (urlCategory) activeTag = urlCategory.toUpperCase().replace('-', ' ');
+
+        if (activeTag) {
+            heroSection.style.display = 'none';
+            filterStatus.classList.remove('hidden');
+            tagNameSpan.innerText = activeTag;
+            renderList(publishedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag), listContainer);
+        } else {
+            heroSection.style.display = 'block';
+            filterStatus.classList.add('hidden');
+            renderBento(publishedPosts.slice(0, 3), bentoHero);
+            if (publishedPosts.length > 3) renderList(publishedPosts.slice(3), listContainer);
+        }
+    }
+
+    function handleNewsletter(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type=submit]');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<span class="relative z-10 flex items-center justify-center"><i class="fas fa-check-circle mr-2 text-lg"></i>Đã kích hoạt VIP!</span>';
+        btn.style.background = '#00e58f'; btn.style.color = '#09090b';
+        setTimeout(() => { btn.innerHTML = orig; btn.style.background=''; btn.style.color=''; }, 3000);
+    }
+
+    // ═══ UNIVERSE ENGINE - TƯƠNG TÁC PARALLAX & DRAG-DROP ASTRONAUT CHUẨN ═══
+    function initUniverse() {
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        function resizeCanvas() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+
+        // Parallax Chuột
+        let mousePanX = 0;
+        let mousePanY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mousePanX = (e.clientX / W - 0.5) * 2;
+            mousePanY = (e.clientY / H - 0.5) * 2;
+        });
+
+        const MAX_STARS = 400;
+        const stars = [];
+        for (let i = 0; i < MAX_STARS; i++) {
+            stars.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: Math.random() * 1.5 + 0.1, 
+                alpha: Math.random(),
+                speedX: (Math.random() - 0.5) * 0.1, 
+                speedY: (Math.random() - 0.5) * 0.1,
+                twinkleSpeed: Math.random() * 0.02 + 0.005,
+                color: Math.random() > 0.8 ? '100, 200, 255' : (Math.random() > 0.8 ? '255, 230, 150' : '255, 255, 255')
+            });
         }
 
-        function filterAndRender() {
-            const bentoHero = document.getElementById('bento-hero');
-            const listContainer = document.getElementById('posts-list');
-            const trendingContainer = document.getElementById('trending-list');
-            const filterStatus = document.getElementById('filter-status');
-            const tagNameSpan = document.getElementById('tag-name');
-            const heroSection = document.getElementById('hero-section');
-
-            let posts = [];
-            try { const localData = localStorage.getItem('crypto_posts'); if (localData) posts = JSON.parse(localData); } catch(e) {}
-            let publishedPosts = posts.filter(p => p.status === 'published').sort((a, b) => b.id - a.id);
-
-            renderTrending(publishedPosts, trendingContainer);
-
-            const params = new URLSearchParams(window.location.search);
-            const urlCategory = params.get('category');
-            
-            let activeTag = null;
-            if (urlCategory && tagMap[urlCategory]) {
-                activeTag = tagMap[urlCategory];
-            } else if (urlCategory) {
-                activeTag = urlCategory.toUpperCase().replace('-', ' ');
+        const meteors = [];
+        function spawnMeteor() {
+            if (Math.random() < 0.015 && meteors.length < 2) {
+                meteors.push({
+                    x: Math.random() * W * 1.5,
+                    y: Math.random() * (H * 0.3) - 100, 
+                    vx: -(Math.random() * 8 + 6), 
+                    vy: Math.random() * 5 + 4,
+                    len: Math.random() * 80 + 50,
+                    life: 1.0,
+                    decay: Math.random() * 0.015 + 0.01
+                });
             }
-
-            if (activeTag) {
-                heroSection.style.display = 'none';
-                filterStatus.classList.remove('hidden');
-                tagNameSpan.innerText = activeTag;
-                const filtered = publishedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag);
-                renderList(filtered, listContainer);
-            } else {
-                heroSection.style.display = 'block';
-                filterStatus.classList.add('hidden');
-                renderBento(publishedPosts.slice(0, 3), bentoHero);
-                if (publishedPosts.length > 3) renderList(publishedPosts.slice(3), listContainer);
-            }
         }
 
-        function handleNewsletter(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type=submit]');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = '<span class="relative z-10 flex items-center justify-center"><i class="fas fa-check-circle mr-2 text-lg"></i>Đã kích hoạt VIP!</span>';
-            btn.style.background = '#00e58f'; btn.style.color = '#09090b';
-            setTimeout(() => {
-                btn.innerHTML = originalContent;
-                btn.style.background = ''; btn.style.color = '';
-            }, 3000);
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            const loadingSkeleton = document.getElementById('loading-skeleton');
-            const contentArea = document.getElementById('content-area');
+        let frame = 0;
+        function drawFrame() {
+            ctx.clearRect(0, 0, W, H);
             
-            initParticles();
+            stars.forEach(s => {
+                s.x += s.speedX - (mousePanX * s.r * 0.8);
+                s.y += s.speedY - (mousePanY * s.r * 0.8);
+                
+                if (s.x < -10) s.x = W + 10;
+                if (s.x > W + 10) s.x = -10;
+                if (s.y < -10) s.y = H + 10;
+                if (s.y > H + 10) s.y = -10;
 
-            try {
-                const response = await fetch('./data/posts.json?v=' + new Date().getTime(), { cache: 'no-store' });
-                if (response.ok) {
-                    const serverPosts = await response.json();
-                    let localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]');
-                    const serverIds = new Set(serverPosts.map(p => String(p.id)));
-                    const localOnlyPosts = localPosts.filter(p => p.status !== 'published' && !serverIds.has(String(p.id)));
-                    localStorage.setItem('crypto_posts', JSON.stringify([...serverPosts, ...localOnlyPosts]));
+                s.alpha += Math.sin(frame * s.twinkleSpeed) * 0.015;
+                if (s.alpha < 0.1) s.alpha = 0.1;
+                if (s.alpha > 1) s.alpha = 1;
+
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${s.color}, ${s.alpha})`;
+                
+                if (s.alpha > 0.8 && s.r > 1.2) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `rgba(${s.color}, 0.8)`;
+                } else {
+                    ctx.shadowBlur = 0;
                 }
-            } catch(e) {}
-            
-            filterAndRender();
-            
-            loadingSkeleton.style.opacity = '0';
-            setTimeout(() => {
-                loadingSkeleton.style.display = 'none';
-                contentArea.classList.remove('hidden');
-                setTimeout(() => {
-                    contentArea.style.opacity = '1';
-                }, 50);
-            }, 500);
-        });
+                
+                ctx.fill();
+            });
 
-        window.addEventListener('popstate', filterAndRender);
+            ctx.shadowBlur = 0;
 
-        let lastScrollY = window.scrollY;
-        window.addEventListener('scroll', () => {
-            const navContainer = document.getElementById('nav-container');
-            if (window.scrollY > lastScrollY && window.scrollY > 200) {
-                navContainer.style.transform = 'translateY(-150%)';
-                navContainer.style.opacity = '0';
-            } else {
-                navContainer.style.transform = 'translateY(0)';
-                navContainer.style.opacity = '1';
+            spawnMeteor();
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                m.x += m.vx;
+                m.y += m.vy;
+                m.life -= m.decay;
+
+                if (m.life <= 0 || m.x < 0 || m.y > H) {
+                    meteors.splice(i, 1);
+                    continue;
+                }
+
+                const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * (m.len/10), m.y - m.vy * (m.len/10));
+                grad.addColorStop(0, `rgba(255, 255, 255, ${m.life})`);
+                grad.addColorStop(1, `rgba(0, 229, 143, 0)`); 
+
+                ctx.beginPath();
+                ctx.moveTo(m.x, m.y);
+                ctx.lineTo(m.x - m.vx * (m.len/10), m.y - m.vy * (m.len/10));
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${m.life})`;
+                ctx.fill();
             }
-            lastScrollY = window.scrollY;
-        });
+
+            frame++;
+            requestAnimationFrame(drawFrame);
+        }
+        drawFrame();
+
+        // --- ASTRONAUTS ĐỘI QUÂN ĐÃ DỌN SẠCH LỖI VIỀN ---
+        const moonScene = document.getElementById('moon-scene');
+        const astros = [];
+        const ASTRO_COUNT = 3;
+
+        for(let i=0; i<ASTRO_COUNT; i++) {
+            let el = document.createElement('div');
+            el.className = 'moon-astronaut';
+            // Gọi GIF phi hành gia súng nước xịn xò
+            el.innerHTML = `<img src="https://i.postimg.cc/sfNhRJwS/87a2d79d6172857242ddcf9fcb4ec998.png" alt="Astronaut">`;
+            moonScene.appendChild(el);
+            
+            let astro = {
+                el: el,
+                x: window.innerWidth * 0.1 + (Math.random() * window.innerWidth * 0.8),
+                y: 50 + Math.random() * 40,
+                // Tốc độ nhanh hơn bản cũ một chút
+                vx: (Math.random() > 0.5 ? 1 : -1) * (0.8 + Math.random() * 1.5), 
+                vy: 0,
+                isDragging: false,
+                isJumping: false
+            };
+            astros.push(astro);
+            
+            // Kéo thả (Drag & Drop)
+            let startX, startY, initialX, initialY;
+            
+            const dragStart = (e) => {
+                astro.isDragging = true;
+                el.style.cursor = 'grabbing';
+                el.style.transform = 'scale(1.1)';
+                startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX; 
+                startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                initialX = astro.x; 
+                initialY = astro.y;
+                if(e.cancelable) e.preventDefault();
+            };
+            
+            const dragMove = (e) => {
+                if(!astro.isDragging) return;
+                let clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                let clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                let dx = clientX - startX;
+                let dy = clientY - startY;
+                astro.x = initialX + dx;
+                astro.y = initialY - dy; // Y invert vì tính từ bottom lên
+                el.style.left = astro.x + 'px';
+                el.style.bottom = astro.y + 'px';
+            };
+            
+            const dragEnd = () => {
+                if(astro.isDragging) {
+                    astro.isDragging = false;
+                    el.style.cursor = 'grab';
+                    el.style.transform = 'scale(1)';
+                    // Ném nhẹ (Thêm lực rơi tự do khi thả)
+                    astro.vy = 2; 
+                }
+            };
+
+            el.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+            
+            // Hỗ trợ Touch trên Mobile
+            el.addEventListener('touchstart', dragStart, {passive: false});
+            document.addEventListener('touchmove', dragMove, {passive: false});
+            document.addEventListener('touchend', dragEnd);
+        }
+
+        // Vòng lặp Physics cho Phi Hành Gia
+        function updateAstros() {
+            astros.forEach(a => {
+                if(a.isDragging) return;
+                
+                // Di chuyển ngang
+                a.x += a.vx;
+                // Vòng qua màn hình
+                if(a.x < -100) a.x = window.innerWidth + 50;
+                if(a.x > window.innerWidth + 100) a.x = -50;
+                
+                // Trọng lực & Nhảy
+                if(a.y > 50) {
+                    a.vy -= 0.3; // Lực hút
+                }
+                a.y += a.vy;
+                
+                if(a.y <= 50) {
+                    a.y = 50;
+                    a.vy = 0;
+                    a.isJumping = false;
+                }
+                
+                // Random bay nhảy tung tăng
+                if(!a.isJumping && Math.random() < 0.01) { 
+                    a.vy = 5 + Math.random() * 5; // Lực nhảy
+                    a.isJumping = true;
+                    // Lâu lâu đổi hướng khi nhảy
+                    if(Math.random() > 0.5) a.vx *= -1;
+                }
+                
+                a.el.style.left = a.x + 'px';
+                a.el.style.bottom = a.y + 'px';
+                
+                // Lật ảnh theo hướng di chuyển
+                const img = a.el.querySelector('img');
+                if(a.vx > 0) img.style.transform = 'scaleX(1)'; 
+                else img.style.transform = 'scaleX(-1)';
+            });
+            requestAnimationFrame(updateAstros);
+        }
+        updateAstros();
+    }
+
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        const navContainer = document.getElementById('nav-container');
+        if (window.scrollY > lastScrollY && window.scrollY > 200) {
+            navContainer.style.transform = 'translateY(-150%)';
+            navContainer.style.opacity = '0';
+        } else {
+            navContainer.style.transform = 'translateY(0)';
+            navContainer.style.opacity = '1';
+        }
+        lastScrollY = window.scrollY;
+    }, { passive: true });
+
+    window.addEventListener('popstate', filterAndRender);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const loadingSkeleton = document.getElementById('loading-skeleton');
+        const contentArea = document.getElementById('content-area');
+
+        initUniverse();
+
+        try {
+            const response = await fetch('./data/posts.json?v=' + new Date().getTime(), { cache: 'no-store' });
+            if (response.ok) {
+                const serverPosts = await response.json();
+                let localPosts = JSON.parse(localStorage.getItem('crypto_posts') || '[]');
+                const serverIds = new Set(serverPosts.map(p => String(p.id)));
+                const localOnlyPosts = localPosts.filter(p => p.status !== 'published' && !serverIds.has(String(p.id)));
+                localStorage.setItem('crypto_posts', JSON.stringify([...serverPosts, ...localOnlyPosts]));
+            }
+        } catch(e) {}
+
+        filterAndRender();
+
+        loadingSkeleton.style.opacity = '0';
+        setTimeout(() => {
+            loadingSkeleton.style.display = 'none';
+            contentArea.classList.remove('hidden');
+            setTimeout(() => { contentArea.style.opacity = '1'; }, 50);
+        }, 500);
+    });
     </script>
 </body>
 </html>
