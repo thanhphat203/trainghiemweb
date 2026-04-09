@@ -120,7 +120,6 @@
         .dark .ticker-wrap { border-bottom: 1px solid rgba(255,255,255,0.02); background: #09090b; }
         .ticker { display: inline-flex; white-space: nowrap; animation: ticker 40s linear infinite; }
         .ticker:hover { animation-play-state: paused; cursor: default; }
-        /* Cập nhật CSS cho ticker-item: thêm align-items và gap phù hợp hơn */
         .ticker-item { padding: 0.6rem 2.5rem; font-size: 0.75rem; color: #00e58f; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem;}
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
@@ -241,7 +240,7 @@
                         Tiêu Điểm Thị Trường
                     </h2>
                 </div>
-                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[540px]">
+                <div id="bento-hero" class="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:h-[500px]">
                 </div>
             </section>
 
@@ -331,7 +330,7 @@
     </footer>
 
     <script>
-        // --- WEB AUDIO API (Tạo tiếng Click mượt mà) ---
+        // --- WEB AUDIO API ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClickSound() {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -340,7 +339,6 @@
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             
-            // Tùy chỉnh tần số cho giống tiếng pop/bloop hiện đại
             osc.type = 'sine';
             osc.frequency.setValueAtTime(800, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
@@ -352,36 +350,28 @@
             osc.stop(audioCtx.currentTime + 0.1);
         }
 
-        // Lắng nghe sự kiện click toàn trang
         document.addEventListener('click', (e) => {
-            // Chỉ phát tiếng khi bấm vào class 'interactive-el' hoặc các bài viết
             if(e.target.closest('.interactive-el') || e.target.closest('.cursor-pointer')) {
                 playClickSound();
             }
         });
 
-        // --- HỆ THỐNG PARTICLES NHẸ NHÀNG ---
+        // --- HỆ THỐNG PARTICLES ---
         function initParticles() {
             const container = document.getElementById('particles-container');
             setInterval(() => {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
-                // Random vị trí, kích thước và tốc độ
                 particle.style.left = Math.random() * 100 + 'vw';
-                const size = Math.random() * 3 + 2; // 2px đến 5px
+                const size = Math.random() * 3 + 2; 
                 particle.style.width = size + 'px';
                 particle.style.height = size + 'px';
-                particle.style.animationDuration = (Math.random() * 5 + 6) + 's'; // Bay trong 6 - 11s
-                
+                particle.style.animationDuration = (Math.random() * 5 + 6) + 's';
                 container.appendChild(particle);
-                
-                // Dọn dẹp DOM sau khi bay xong để chống lag
                 setTimeout(() => { particle.remove(); }, 12000);
-            }, 600); // Cứ 600ms đẻ ra 1 đốm, không bị quá dày đặc
+            }, 600); 
         }
 
-        // MAPPING TAGS
         const tagMap = {
             'tin-tuc': 'TIN TỨC', 'kinh-te': 'KINH TẾ', 'tai-chinh': 'TÀI CHÍNH',
             'phan-tich': 'PHÂN TÍCH', 'research': 'RESEARCH', 'airdrop': 'AIRDROP'
@@ -445,47 +435,47 @@
             return { views: metrics.views.toLocaleString('vi-VN'), likes: metrics.likes.toLocaleString('vi-VN'), score: metrics.views * 0.4 + metrics.likes * 3 };
         }
 
-        // RENDER BENTO CHUẨN BO GÓC MỚI (FIXED LAYOUT TỶ LỆ VÀNG)
+        // BẢN RENDER BENTO ĐÃ ĐƯỢC NÂNG CẤP (GỌN GÀNG, CHUYÊN NGHIỆP HƠN)
         function renderBento(heroPosts, container) {
             if (heroPosts.length === 0) return;
 
             const p1 = heroPosts[0];
             const m1 = getMetrics(p1.id);
 
-            // CỘT TRÁI: Khung bài viết chính to bự
+            // CỘT TRÁI: Khung bài viết chính - Chỉnh lại font, padding và gradient mượt hơn
             let html = `
-            <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group lg:col-span-8 h-[450px] lg:h-full overflow-hidden flex flex-col justify-end p-8 md:p-10 img-zoom-container relative rounded-[2rem]">
-                <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-90 dark:opacity-50 transition-transform duration-1000">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/60 to-transparent opacity-90 dark:opacity-100 group-hover:via-[#09090b]/70 transition-all duration-700"></div>
+            <div onclick="goToPost('${p1.slug}')" class="cursor-pointer premium-card group lg:col-span-8 h-[400px] lg:h-full overflow-hidden flex flex-col justify-end p-6 md:p-8 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+                <img src="${getImg(p1.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000 ease-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/70 to-transparent transition-opacity duration-500"></div>
                 <div class="relative z-10 w-full max-w-3xl mt-auto">
-                    <div class="flex flex-wrap items-center gap-3 mb-4">
-                        <span class="bg-accent text-black text-[11px] font-extrabold px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-[0_0_15px_rgba(0,229,143,0.4)] flex items-center gap-1.5"><i class="fas fa-bolt"></i> HOT</span>
-                        <span class="border border-white/20 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg uppercase tracking-widest backdrop-blur-md bg-white/5">${p1.category || 'TIN TỨC'}</span>
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="bg-accent text-black text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider shadow-[0_0_10px_rgba(0,229,143,0.3)] flex items-center gap-1.5"><i class="fas fa-bolt"></i> HOT</span>
+                        <span class="border border-white/20 text-white text-[10px] font-medium px-2 py-1 rounded uppercase tracking-wider backdrop-blur-md bg-white/10">${p1.category || 'TIN TỨC'}</span>
                     </div>
-                    <h1 class="text-[1.8rem] md:text-[2.4rem] lg:text-[2.6rem] font-extrabold text-white mb-4 leading-[1.2] group-hover:text-accent transition-colors duration-500 tracking-tight line-clamp-2 md:line-clamp-3">${p1.title}</h1>
-                    <div class="flex items-center gap-6 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        <span class="flex items-center gap-1.5"><i class="far fa-clock text-accent/70 text-sm"></i>${formatDate(p1.date)}</span>
-                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/70 text-sm"></i>${m1.views}</span>
+                    <h1 class="text-2xl md:text-[1.75rem] lg:text-[2rem] font-bold text-white mb-3 leading-[1.35] group-hover:text-accent transition-colors duration-300 line-clamp-3 drop-shadow-lg">${p1.title}</h1>
+                    <div class="flex items-center gap-4 text-[11px] font-medium text-gray-300 uppercase tracking-wider">
+                        <span class="flex items-center gap-1.5"><i class="far fa-clock text-accent/80 text-sm"></i>${formatDate(p1.date)}</span>
+                        <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/80 text-sm"></i>${m1.views}</span>
                         <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/80 text-sm"></i>${m1.likes}</span>
                     </div>
                 </div>
             </div>`;
 
-            // CỘT PHẢI: Chứa 2 bài viết nhỏ chia đôi chiều cao (flex-1)
+            // CỘT PHẢI: Chứa 2 bài viết nhỏ - Được canh đều, padding vừa phải, text drop-shadow
             if (heroPosts.length > 1) {
-                html += `<div class="lg:col-span-4 flex flex-col gap-6 h-[600px] lg:h-full">`;
+                html += `<div class="lg:col-span-4 flex flex-col gap-5 h-[600px] lg:h-full">`;
 
                 const p2 = heroPosts[1];
                 const m2 = getMetrics(p2.id);
                 html += `
-                <div onclick="goToPost('${p2.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-6 lg:p-7 img-zoom-container relative rounded-[1.8rem]">
-                    <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-40">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent opacity-90 dark:opacity-100 group-hover:from-[#09090b]/90 transition-all duration-700"></div>
+                <div onclick="goToPost('${p2.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+                    <img src="${getImg(p2.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent"></div>
                     <div class="relative z-10 mt-auto">
-                        <span class="text-accent text-[9px] font-extrabold uppercase tracking-widest mb-2 block opacity-90">${p2.category || 'TIN TỨC'}</span>
-                        <h3 class="text-[1.1rem] md:text-[1.15rem] font-bold text-white mb-3 leading-snug group-hover:text-accent transition-colors duration-300 line-clamp-2">${p2.title}</h3>
-                        <div class="flex items-center gap-4 text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
-                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/50"></i>${m2.views}</span>
+                        <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block drop-shadow-md">${p2.category || 'TIN TỨC'}</span>
+                        <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2 drop-shadow-md">${p2.title}</h3>
+                        <div class="flex items-center gap-4 text-[10px] text-gray-300 font-medium uppercase tracking-wider">
+                            <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m2.views}</span>
                             <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m2.likes}</span>
                         </div>
                     </div>
@@ -495,14 +485,14 @@
                     const p3 = heroPosts[2];
                     const m3 = getMetrics(p3.id);
                     html += `
-                    <div onclick="goToPost('${p3.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-6 lg:p-7 img-zoom-container relative rounded-[1.8rem]">
-                        <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-40">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/40 to-transparent opacity-90 dark:opacity-100 group-hover:from-[#09090b]/90 transition-all duration-700"></div>
+                    <div onclick="goToPost('${p3.slug}')" class="flex-1 cursor-pointer premium-card group overflow-hidden flex flex-col justify-end p-5 lg:p-6 img-zoom-container relative rounded-3xl ring-1 ring-white/5">
+                        <img src="${getImg(p3.image)}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-1000 ease-out">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[#09090b]/50 to-transparent"></div>
                         <div class="relative z-10 mt-auto">
-                            <span class="text-blue-400 text-[9px] font-extrabold uppercase tracking-widest mb-2 block opacity-90">${p3.category || 'PHÂN TÍCH'}</span>
-                            <h3 class="text-[1.1rem] md:text-[1.15rem] font-bold text-white mb-3 leading-snug group-hover:text-blue-400 transition-colors duration-300 line-clamp-2">${p3.title}</h3>
-                            <div class="flex items-center gap-4 text-[11px] text-gray-400 font-semibold uppercase tracking-wider">
-                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-blue-400/50"></i>${m3.views}</span>
+                            <span class="text-accent text-[10px] font-bold uppercase tracking-wider mb-2 block drop-shadow-md">${p3.category || 'PHÂN TÍCH'}</span>
+                            <h3 class="text-lg font-bold text-white mb-2.5 leading-[1.3] group-hover:text-accent transition-colors duration-300 line-clamp-2 drop-shadow-md">${p3.title}</h3>
+                            <div class="flex items-center gap-4 text-[10px] text-gray-300 font-medium uppercase tracking-wider">
+                                <span class="flex items-center gap-1.5"><i class="far fa-eye text-accent/60"></i>${m3.views}</span>
                                 <span class="flex items-center gap-1.5"><i class="far fa-heart text-red-400/60"></i>${m3.likes}</span>
                             </div>
                         </div>
@@ -513,7 +503,7 @@
             container.innerHTML = html;
         }
 
-        // RENDER LIST UI MỚI
+        // RENDER LIST
         function renderList(posts, container) {
             if (posts.length === 0) { container.innerHTML = ''; return; }
             let html = '';
@@ -626,7 +616,6 @@
             const loadingSkeleton = document.getElementById('loading-skeleton');
             const contentArea = document.getElementById('content-area');
             
-            // Khởi chạy Particle Effects
             initParticles();
 
             try {
