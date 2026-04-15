@@ -312,6 +312,116 @@
         #hamburger-btn.open .hamburger-line:nth-child(1) { transform: rotate(45deg) translate(3px, 4px); }
         #hamburger-btn.open .hamburger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
         #hamburger-btn.open .hamburger-line:nth-child(3) { transform: rotate(-45deg) translate(3px, -4px); }
+
+        /* ══════════════════════════════════════════
+           [MỚI] BOOKMARK BUTTON
+        ══════════════════════════════════════════ */
+        .bookmark-btn {
+            position: absolute; top: 12px; right: 12px; z-index: 10;
+            width: 32px; height: 32px; border-radius: 8px;
+            background: rgba(9,9,11,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            opacity: 0; transform: scale(0.8);
+        }
+        .group:hover .bookmark-btn { opacity: 1; transform: scale(1); }
+        .bookmark-btn:hover { background: rgba(0,229,143,0.15); border-color: #00e58f; color: #00e58f; }
+        .bookmark-btn.saved { opacity: 1 !important; transform: scale(1) !important; color: #00e58f; border-color: rgba(0,229,143,0.4); background: rgba(0,229,143,0.1); }
+        @keyframes bookmarkPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .bookmark-pop { animation: bookmarkPop 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+        /* ══════════════════════════════════════════
+           [MỚI] NEW BADGE
+        ══════════════════════════════════════════ */
+        .new-badge {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            background: linear-gradient(135deg, #00e58f, #00c97d);
+            color: #09090b; font-size: 0.62rem; font-weight: 900;
+            padding: 0.2rem 0.6rem; border-radius: 6px;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            animation: newPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 12px rgba(0,229,143,0.4);
+        }
+        @keyframes newPulse { 0%, 100% { box-shadow: 0 0 12px rgba(0,229,143,0.4); } 50% { box-shadow: 0 0 20px rgba(0,229,143,0.7); } }
+
+        /* ══════════════════════════════════════════
+           [MỚI] SORT BUTTONS
+        ══════════════════════════════════════════ */
+        .sort-btn {
+            padding: 0.35rem 0.9rem; border-radius: 8px; font-size: 0.72rem;
+            font-weight: 700; letter-spacing: 0.06em; cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.07); color: #94a3b8;
+            background: transparent; transition: all 0.25s;
+        }
+        .dark .sort-btn { border-color: rgba(255,255,255,0.07); }
+        .sort-btn:hover { color: #00e58f; border-color: rgba(0,229,143,0.3); }
+        .sort-btn.active { background: rgba(0,229,143,0.1); color: #00e58f; border-color: rgba(0,229,143,0.3); }
+
+        /* ══════════════════════════════════════════
+           [MỚI] TAGS CLOUD
+        ══════════════════════════════════════════ */
+        .tag-cloud-pill {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.9rem; border-radius: 8px;
+            font-size: 0.72rem; font-weight: 700;
+            border: 1px solid rgba(0,0,0,0.06); color: #64748b;
+            background: transparent; cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+            margin: 0.2rem;
+        }
+        .dark .tag-cloud-pill { border-color: rgba(255,255,255,0.06); color: #64748b; }
+        .tag-cloud-pill:hover { background: rgba(0,229,143,0.08); color: #00e58f; border-color: rgba(0,229,143,0.25); transform: translateY(-1px); }
+        .tag-cloud-pill .count { font-size: 0.62rem; background: rgba(0,0,0,0.05); border-radius: 4px; padding: 1px 5px; }
+        .dark .tag-cloud-pill .count { background: rgba(255,255,255,0.05); }
+
+        /* ══════════════════════════════════════════
+           [MỚI] ANIMATED COUNTER
+        ══════════════════════════════════════════ */
+        .count-up { transition: all 0.8s ease; }
+
+        /* ══════════════════════════════════════════
+           [MỚI] BOOKMARK SAVED TOAST
+        ══════════════════════════════════════════ */
+        #bookmark-toast {
+            position: fixed; bottom: 5.5rem; left: 50%; transform: translate(-50%, 20px);
+            background: #0f172a; color: #fff; padding: 10px 22px;
+            border-radius: 99px; font-weight: 700; font-size: 0.82rem;
+            opacity: 0; transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+            z-index: 200; display: flex; align-items: center; gap: 8px;
+            border: 1px solid rgba(0,229,143,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            pointer-events: none; white-space: nowrap;
+        }
+        .dark #bookmark-toast { background: #18181b; }
+        #bookmark-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        /* ══════════════════════════════════════════
+           [MỚI] BOOKMARKS WIDGET
+        ══════════════════════════════════════════ */
+        .saved-post-item {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.6rem 0.75rem; border-radius: 0.75rem; cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+        }
+        .saved-post-item:hover { background: rgba(0,229,143,0.05); border-color: rgba(0,229,143,0.15); }
+        .saved-post-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+        .saved-post-title { font-size: 0.78rem; font-weight: 700; line-height: 1.35; color: #1e293b; }
+        .dark .saved-post-title { color: #f1f5f9; }
+
+        /* ══════════════════════════════════════════
+           [MỚI] SEARCH HISTORY
+        ══════════════════════════════════════════ */
+        .search-history-item {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.6rem 0.9rem; border-radius: 0.6rem; cursor: pointer;
+            font-size: 0.82rem; color: #94a3b8; font-weight: 600;
+            transition: all 0.2s;
+        }
+        .search-history-item:hover { background: rgba(255,255,255,0.05); color: #f1f5f9; }
     </style>
 </head>
 <body class="bg-background text-textMain dark:bg-darkBg dark:text-darkTextMain antialiased flex flex-col min-h-screen relative selection:bg-accent selection:text-black">
@@ -329,10 +439,14 @@
                 <input id="search-input" type="text" placeholder="Tìm kiếm bài viết..." autocomplete="off" oninput="doSearch(this.value)">
                 <kbd class="absolute right-5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-gray-500 border border-gray-600 rounded px-1.5 py-0.5">ESC</kbd>
             </div>
+            <div id="search-history-bar" class="mt-3 flex flex-wrap gap-1 px-1"></div>
             <div id="search-results"></div>
-            <p class="text-center text-xs text-gray-600 mt-4">Nhấn <kbd class="border border-gray-600 rounded px-1 py-0.5 text-gray-400">ESC</kbd> để đóng</p>
+            <p class="text-center text-xs text-gray-600 mt-4">Nhấn <kbd class="border border-gray-600 rounded px-1 py-0.5 text-gray-400">ESC</kbd> để đóng · <kbd class="border border-gray-600 rounded px-1 py-0.5 text-gray-400">⌘K</kbd> để mở</p>
         </div>
     </div>
+
+    <!-- ══════ [MỚI] BOOKMARK TOAST ══════ -->
+    <div id="bookmark-toast"><i class="fas fa-bookmark text-accent"></i> <span id="bookmark-toast-msg">Đã lưu bài viết!</span></div>
 
     <!-- ══════ [MỚI] MOBILE MENU ══════ -->
     <div id="mobile-menu">
@@ -452,6 +566,13 @@
                             </div>
                         </div>
 
+                        <!-- [MỚI] Sort Buttons -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-textMuted dark:text-gray-500 uppercase tracking-widest">Sắp xếp:</span>
+                            <button class="sort-btn active" id="sort-newest" onclick="setSort('newest', this)"><i class="fas fa-clock mr-1 text-[10px]"></i>Mới nhất</button>
+                            <button class="sort-btn" id="sort-popular" onclick="setSort('popular', this)"><i class="fas fa-fire mr-1 text-[10px]"></i>Phổ biến</button>
+                        </div>
+
                         <!-- [MỚI] Category Pill Filters -->
                         <div id="category-pills" class="flex flex-wrap gap-2">
                             <button class="cat-pill active" data-tag="" onclick="pillarFilter(this, '', '')">Tất cả</button>
@@ -521,11 +642,11 @@
                         </h3>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="rounded-2xl bg-background dark:bg-darkBg p-4 text-center">
-                                <div class="text-2xl font-extrabold text-accent" id="stat-posts">–</div>
+                                <div class="text-2xl font-extrabold text-accent count-up" id="stat-posts">–</div>
                                 <div class="text-[11px] font-bold text-textMuted dark:text-gray-500 mt-1 uppercase tracking-wider">Bài viết</div>
                             </div>
                             <div class="rounded-2xl bg-background dark:bg-darkBg p-4 text-center">
-                                <div class="text-2xl font-extrabold text-accent" id="stat-views">–</div>
+                                <div class="text-2xl font-extrabold text-accent count-up" id="stat-views">–</div>
                                 <div class="text-[11px] font-bold text-textMuted dark:text-gray-500 mt-1 uppercase tracking-wider">Lượt đọc</div>
                             </div>
                         </div>
@@ -533,6 +654,33 @@
                             <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
                             Đang hoạt động
                         </div>
+                    </div>
+
+                    <!-- [MỚI] Bookmarks Widget -->
+                    <div class="premium-card rounded-[2rem] p-6 lg:p-8 reveal reveal-delay-3" id="bookmarks-widget">
+                        <h3 class="text-xs font-extrabold mb-5 tracking-widest uppercase text-textMain dark:text-white border-b border-gray-100 dark:border-white/5 pb-5 flex items-center justify-between">
+                            <span class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center">
+                                    <i class="fas fa-bookmark text-accent text-xs"></i>
+                                </div>
+                                Đã Lưu
+                            </span>
+                            <span class="text-accent font-extrabold text-sm bg-accent/10 px-2 py-0.5 rounded-md" id="saved-count">0</span>
+                        </h3>
+                        <div id="saved-posts-list" class="space-y-1">
+                            <p class="text-xs text-textMuted dark:text-gray-500 italic text-center py-4 opacity-70">Chưa lưu bài viết nào. Nhấn <i class="fas fa-bookmark text-accent"></i> để lưu.</p>
+                        </div>
+                    </div>
+
+                    <!-- [MỚI] Tags Cloud Widget -->
+                    <div class="premium-card rounded-[2rem] p-6 lg:p-8 reveal reveal-delay-3">
+                        <h3 class="text-xs font-extrabold mb-5 tracking-widest uppercase text-textMain dark:text-white border-b border-gray-100 dark:border-white/5 pb-5 flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-tags text-purple-400 text-xs"></i>
+                            </div>
+                            Tags Nổi Bật
+                        </h3>
+                        <div id="tags-cloud" class="flex flex-wrap gap-1"></div>
                     </div>
                 </aside>
             </div>
@@ -660,6 +808,7 @@
             document.getElementById('search-overlay').classList.add('active');
             setTimeout(() => document.getElementById('search-input').focus(), 100);
             document.body.style.overflow = 'hidden';
+            renderSearchHistory();
         }
         function closeSearch(e) {
             if (!e || e.target === document.getElementById('search-overlay') || e.type === 'keydown') {
@@ -676,7 +825,9 @@
 
         function doSearch(query) {
             const container = document.getElementById('search-results');
-            if (!query.trim()) { container.innerHTML = ''; return; }
+            if (!query.trim()) { container.innerHTML = ''; renderSearchHistory(); return; }
+            if (query.length >= 2) addSearchHistory(query);
+            document.getElementById('search-history-bar').innerHTML = '';
             const q = query.toLowerCase();
             const results = allPostsCache.filter(p => p.status === 'published' &&
                 (p.title?.toLowerCase().includes(q) || p.excerpt?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q) || (p.tags || []).some(t => t.toLowerCase().includes(q)))
@@ -906,18 +1057,25 @@
             posts.forEach((post, i) => {
                 const m = getMetrics(post.id);
                 const readTime = calcReadTime(post.content);
+                const isNew = post.date && (Date.now() - new Date(post.date).getTime()) < 48 * 60 * 60 * 1000;
+                const savedPosts = JSON.parse(localStorage.getItem('saved_posts') || '[]');
+                const isSaved = savedPosts.some(s => s.id == post.id);
                 html += `
                 <article class="reveal group relative flex flex-col sm:flex-row gap-6 p-4 sm:p-5 rounded-[1.5rem] bg-surface dark:bg-[#121214] border border-gray-100 dark:border-white/5 hover:border-accent/30 dark:hover:border-accent/40 hover:shadow-xl dark:hover:shadow-[0_10px_40px_rgba(0,229,143,0.05)] transition-all duration-500 hover:-translate-y-1 overflow-hidden">
                     <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-accent transform scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom"></div>
                     <div onclick="goToPost('${post.slug}')" class="cursor-pointer w-full sm:w-[260px] aspect-[16/10] sm:aspect-[4/3] rounded-2xl overflow-hidden relative img-zoom-container shrink-0 shadow-sm">
                         <img src="${getImg(post.image)}" class="w-full h-full object-cover opacity-90 dark:opacity-80 group-hover:opacity-100 transition-all duration-700">
                         <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                        <div class="absolute top-3 left-3">
+                        <div class="absolute top-3 left-3 flex items-center gap-1.5">
                             <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-widest border border-white/10">${post.category || 'TIN TỨC'}</span>
+                            ${isNew ? '<span class="new-badge"><i class="fas fa-circle text-[4px]"></i>MỚI</span>' : ''}
                         </div>
                         <div class="absolute bottom-3 right-3">
                             <span class="bg-black/60 backdrop-blur-md text-white text-[9px] font-bold px-2 py-1 rounded-md flex items-center gap-1 border border-white/10"><i class="far fa-clock text-[8px]"></i> ${readTime}p</span>
                         </div>
+                        <button class="bookmark-btn ${isSaved ? 'saved' : ''}" onclick="toggleBookmark(event, '${post.id}', '${post.slug}', ${JSON.stringify(post.title).replace(/'/g,"&#39;")}, '${getImg(post.image)}')" title="${isSaved ? 'Bỏ lưu' : 'Lưu bài viết'}">
+                            <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
+                        </button>
                     </div>
                     <div class="flex-1 flex flex-col justify-center py-1 w-full pr-2">
                         <div class="flex items-center gap-3 text-[11px] font-medium text-textMuted dark:text-darkTextMuted mb-2.5 uppercase tracking-widest">
@@ -977,15 +1135,20 @@
             allPostsCache = posts; // for search
 
             renderTrending(publishedPosts, trendingContainer);
+            renderTagsCloud(publishedPosts);
+            renderSavedPosts();
 
-            // Stats
+            // Stats with animation
             const totalViews = publishedPosts.reduce((acc, p) => {
                 try { const m = JSON.parse(localStorage.getItem(`metrics_post_${p.id}`)); return acc + (m?.views || 0); } catch(e) { return acc; }
             }, 0);
             const statPosts = document.getElementById('stat-posts');
             const statViews = document.getElementById('stat-views');
-            if (statPosts) statPosts.textContent = publishedPosts.length;
-            if (statViews) statViews.textContent = totalViews > 1000 ? (totalViews/1000).toFixed(1)+'K' : totalViews;
+            if (statPosts) animateCounter(statPosts, publishedPosts.length);
+            if (statViews) {
+                if (totalViews > 1000) animateCounter(statViews, parseFloat((totalViews/1000).toFixed(1)), 'K');
+                else animateCounter(statViews, totalViews);
+            }
 
             const params = new URLSearchParams(window.location.search);
             const urlCategory = params.get('category');
@@ -995,21 +1158,28 @@
 
             currentShowing = 7;
 
+            // Apply sort
+            let sortedPosts = [...publishedPosts];
+            if (currentSort === 'popular') {
+                sortedPosts = sortedPosts.map(p => ({ ...p, _score: getMetrics(p.id).score }))
+                    .sort((a, b) => b._score - a._score);
+            }
+
             if (activeTag) {
                 heroSection.style.display = 'none';
                 filterStatus.classList.remove('hidden');
                 tagNameSpan.innerText = activeTag;
-                currentFilteredPosts = publishedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag);
+                currentFilteredPosts = sortedPosts.filter(p => p.category && p.category.toUpperCase() === activeTag);
                 renderList(currentFilteredPosts, listContainer);
                 document.getElementById('load-more-btn').style.display = currentFilteredPosts.length > 7 ? 'block' : 'none';
             } else {
                 heroSection.style.display = 'block';
                 filterStatus.classList.add('hidden');
                 renderBento(publishedPosts.slice(0, 3), bentoHero);
-                currentFilteredPosts = publishedPosts;
-                if (publishedPosts.length > 3) {
-                    renderList(publishedPosts.slice(3, currentShowing), listContainer);
-                    document.getElementById('load-more-btn').style.display = publishedPosts.length > currentShowing ? 'block' : 'none';
+                currentFilteredPosts = sortedPosts;
+                if (sortedPosts.length > 3) {
+                    renderList(sortedPosts.slice(3, currentShowing), listContainer);
+                    document.getElementById('load-more-btn').style.display = sortedPosts.length > currentShowing ? 'block' : 'none';
                 }
             }
         }
@@ -1021,6 +1191,140 @@
             btn.innerHTML = '<span class="relative z-10 flex items-center justify-center"><i class="fas fa-check-circle mr-2 text-lg"></i>Đã kích hoạt VIP!</span>';
             btn.style.background = '#00e58f'; btn.style.color = '#09090b';
             setTimeout(() => { btn.innerHTML = originalContent; btn.style.background = ''; btn.style.color = ''; }, 3000);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  [MỚI] SORT SYSTEM
+        // ═══════════════════════════════════════════════════════════════
+        let currentSort = 'newest';
+        function setSort(type, btn) {
+            currentSort = type;
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterAndRender();
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  [MỚI] BOOKMARK SYSTEM
+        // ═══════════════════════════════════════════════════════════════
+        function toggleBookmark(e, id, slug, title, image) {
+            e.stopPropagation();
+            const btn = e.currentTarget;
+            const savedPosts = JSON.parse(localStorage.getItem('saved_posts') || '[]');
+            const idx = savedPosts.findIndex(s => s.id == id);
+            if (idx === -1) {
+                savedPosts.push({ id, slug, title, image, savedAt: Date.now() });
+                btn.innerHTML = '<i class="fas fa-bookmark"></i>';
+                btn.classList.add('saved', 'bookmark-pop');
+                showBookmarkToast('Đã lưu bài viết!');
+                setTimeout(() => btn.classList.remove('bookmark-pop'), 400);
+            } else {
+                savedPosts.splice(idx, 1);
+                btn.innerHTML = '<i class="far fa-bookmark"></i>';
+                btn.classList.remove('saved');
+                showBookmarkToast('Đã bỏ lưu!');
+            }
+            localStorage.setItem('saved_posts', JSON.stringify(savedPosts));
+            renderSavedPosts();
+        }
+
+        function showBookmarkToast(msg) {
+            const t = document.getElementById('bookmark-toast');
+            document.getElementById('bookmark-toast-msg').textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2200);
+        }
+
+        function renderSavedPosts() {
+            const savedPosts = JSON.parse(localStorage.getItem('saved_posts') || '[]');
+            const list = document.getElementById('saved-posts-list');
+            const countEl = document.getElementById('saved-count');
+            if (countEl) countEl.textContent = savedPosts.length;
+            if (!list) return;
+            if (savedPosts.length === 0) {
+                list.innerHTML = '<p class="text-xs text-textMuted dark:text-gray-500 italic text-center py-4 opacity-70">Chưa lưu bài viết nào. Nhấn <i class="fas fa-bookmark text-accent"></i> để lưu.</p>';
+                return;
+            }
+            list.innerHTML = savedPosts.slice().reverse().slice(0, 5).map(p => `
+                <div onclick="goToPost('${p.slug}')" class="saved-post-item cursor-pointer group">
+                    <img src="${p.image}" class="saved-post-img" onerror="this.src='https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=200'">
+                    <div class="flex-1 min-w-0">
+                        <p class="saved-post-title group-hover:text-accent transition-colors line-clamp-2">${p.title}</p>
+                    </div>
+                    <button onclick="event.stopPropagation(); removeSaved(${p.id})" class="text-gray-400 hover:text-red-400 transition-colors text-xs ml-1 flex-shrink-0">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeSaved(id) {
+            const savedPosts = JSON.parse(localStorage.getItem('saved_posts') || '[]');
+            const filtered = savedPosts.filter(s => s.id != id);
+            localStorage.setItem('saved_posts', JSON.stringify(filtered));
+            renderSavedPosts();
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  [MỚI] TAGS CLOUD
+        // ═══════════════════════════════════════════════════════════════
+        function renderTagsCloud(posts) {
+            const container = document.getElementById('tags-cloud');
+            if (!container) return;
+            const tagCount = {};
+            posts.forEach(p => {
+                if (p.category) tagCount[p.category] = (tagCount[p.category] || 0) + 1;
+                if (p.tags) p.tags.forEach(t => { tagCount[t.trim()] = (tagCount[t.trim()] || 0) + 1; });
+            });
+            const sorted = Object.entries(tagCount).sort((a,b) => b[1]-a[1]).slice(0, 15);
+            container.innerHTML = sorted.map(([tag, count]) => `
+                <button class="tag-cloud-pill" onclick="pillarFilter(this, '${tag.toUpperCase()}', '${tag.toLowerCase().replace(/ /g, '-')}')">
+                    #${tag} <span class="count">${count}</span>
+                </button>
+            `).join('');
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  [MỚI] ANIMATED COUNTER
+        // ═══════════════════════════════════════════════════════════════
+        function animateCounter(el, target, suffix = '') {
+            if (!el) return;
+            const start = 0;
+            const duration = 1200;
+            const startTime = performance.now();
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(start + (target - start) * eased);
+                el.textContent = current.toLocaleString('vi-VN') + suffix;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        //  [MỚI] SEARCH HISTORY
+        // ═══════════════════════════════════════════════════════════════
+        function getSearchHistory() {
+            try { return JSON.parse(localStorage.getItem('search_history') || '[]'); } catch(e) { return []; }
+        }
+        function addSearchHistory(query) {
+            if (!query.trim() || query.length < 2) return;
+            let h = getSearchHistory().filter(q => q !== query);
+            h.unshift(query);
+            h = h.slice(0, 6);
+            localStorage.setItem('search_history', JSON.stringify(h));
+        }
+        function renderSearchHistory() {
+            const bar = document.getElementById('search-history-bar');
+            if (!bar) return;
+            const h = getSearchHistory();
+            if (h.length === 0) { bar.innerHTML = ''; return; }
+            bar.innerHTML = `<span class="text-[10px] text-gray-600 font-bold uppercase tracking-wider self-center mr-1">Gần đây:</span>` +
+                h.map(q => `<button class="search-history-item" onclick="document.getElementById('search-input').value='${q}'; doSearch('${q}')" style="padding:0.25rem 0.7rem; border-radius:6px; font-size:0.72rem;">
+                    <i class="fas fa-history text-[10px]"></i> ${q}
+                </button>`).join('');
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
